@@ -2,9 +2,11 @@
 
 Javascript wrapper around rsync with a command line interface.
 
-## Instalation
+## Install
 
-lol
+```sh
+npm install --global synd
+```
 
 ## Usage
 
