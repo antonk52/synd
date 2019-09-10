@@ -1,6 +1,7 @@
 # Synd
+[![npm version](https://badge.fury.io/js/synd.svg)](https://badge.fury.io/js/synd)
 
-Javascript wrapper around rsync with a command line interface.
+Opinionated rsync wrapper written in javascript.
 
 ## Install
 
