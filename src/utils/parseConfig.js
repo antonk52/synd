@@ -6,6 +6,12 @@ const getPresetConfig = require('./getPresetConfig');
 const DEAFULT_CONFIG = {
     initSync: false,
     watch: true,
+    include: [],
+    exclude: [],
+    globalGitignore: false,
+    localGitignore: false,
+    parseOutput: false,
+    showRsyncCommand: false,
 };
 
 const parseConfig = name => {

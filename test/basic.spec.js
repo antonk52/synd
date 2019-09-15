@@ -30,8 +30,6 @@ jest.mock(`../src/utils/getPresetConfig`, () => {
     return () => ({
         src,
         dest,
-        include: [],
-        exclude: [],
         initSync: true,
         watch: false,
     });
