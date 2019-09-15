@@ -1,6 +1,7 @@
 # Synd
 [![npm version](https://badge.fury.io/js/synd.svg)](https://badge.fury.io/js/synd)
 [![CircleCI](https://circleci.com/gh/antonk52/synd.svg?style=shield)](https://circleci.com/gh/antonk52/synd)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 Opinionated rsync wrapper written in javascript.
 
