@@ -1,8 +1,9 @@
-const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
 const dirTree = require('directory-tree');
+
+const syndProcess = require('../src/utils/syndProcess');
 
 function normalizePaths(tree, dirName) {
     tree.path = tree.path
@@ -15,33 +16,32 @@ function normalizePaths(tree, dirName) {
 
 beforeEach(() => {
     const destPath = './test/suits/basic/dest';
+    if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
     const files = fs.readdirSync(destPath) || [];
 
     files.forEach(x => rimraf.sync(path.resolve(destPath, x)));
 });
 
-jest.mock(`${process.env.HOME}/.synd.config.js`, () => {
+jest.mock(`../src/utils/getPresetConfig`, () => {
     const path = require('path');
     const src = path.resolve('./test/suits/basic/src') + '/';
     const dest = path.resolve('./test/suits/basic/dest');
 
-    return {
-        basic: {
-            src,
-            dest,
-            include: [],
-            exclude: [],
-            initSync: true,
-        },
-    };
+    return () => ({
+        src,
+        dest,
+        include: [],
+        exclude: [],
+        initSync: true,
+        watch: false,
+    });
 });
 
 const execSynd = async ({preset, timeout = 1000}) => {
-    const syndProcess = cp.exec(`./bin/synd ${preset}`);
+    syndProcess(preset)
 
     return new Promise(resolve => {
         setTimeout(() => {
-            syndProcess.kill();
             resolve();
         }, timeout);
     });
