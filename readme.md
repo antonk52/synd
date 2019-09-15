@@ -16,63 +16,19 @@ npm install --global synd
 Create a `~/.synd.config.js` file in your home directory with a configuration preset for your project.
 
 ```js
-// ~/.synd.config.js
-
 module.exports = {
+    // remote sync
     presetName: {
-        // path to source directory
-        // should end with a slash
-        // string
         src: '/Users/yourUserName/path/to/a/project/to/sync/',
-        // path to destination directory
-        // should not end with a slash
-        // string
         dest: '/home/yourUserName/path/to/dir/to/sync/to',
-        // server address
-        // string
-        server: 'your.server.name.org',
-        // force sync before first file change
-        // boolean
-        // default false
-        initSync: true,
-        // watch for changes
-        // boolean
-        // default true
-        watch: true,
-        // parse global .gitignore to exclude ignored files
-        // boolean
-        // default false
-        globalGitignore: false,
-        // parse local .gitignore to exclude ignored files
-        // boolean
-        // default false
-        localGitignore: false,
-        // show rsync command
-        // boolean
-        // default false
-        showRsyncCommand: true,
-        // miserably attempt to parse rsync output
-        // boolean
-        // default false
-        parseOutput: false,
-        // explicitly include
-        // array
-        include: [
-            'thisSpecialFileName.js',
-        ],
-        // explicitly exclude
-        // array
-        exclude: [
-            '**/.git',
-            '**/.DS_Store',
-        ],
+        server: 'your.company.org'
     },
     // local sync
     anotherPreset: {
         src: '/Users/yourUserName/path/to/another/project/to/sync/',
-        dest: '/Users/yourUserName/path/to/another/dir/',
-    },
-},
+        dest: '/Users/yourUserName/path/to/another/dir'
+    }
+};
 ```
 
 To start sync process run the following
@@ -80,6 +36,57 @@ To start sync process run the following
 ```
 synd presetName
 ```
+
+## Preset Options
+
+|Name                                        | Type         | Default | Description                                            |
+|--------------------------------------------|--------------|---------|--------------------------------------------------------|
+|**[`src`](#src)**                           | `{String}`   |         | Absolute path to the directory you want to sync        |
+|**[`dest`](#dest)**                         | `{String}`   |         | Absolute path to the directory you want to sync to     |
+|**[`server`](#server)**                     | `{String}`   |         | Name of the server you want to sync to                 |
+|**[`initSync`](#initSync)**                 | `{Boolean}`  | `false` | Enables/Disables syncing upon program start            |
+|**[`watch`](#watch)**                       | `{Boolean}`  | `true`  | Enables/Disables watching for file/directory changes   |
+|**[`globalGitignore`](#gitignores)**        | `{Boolean}`  | `false` | Enables/Disables using global `.gitignore` for syncing |
+|**[`localGitignore`](#gitignores)**         | `{Boolean}`  | `false` | Enables/Disables using local `.gitignore` for syncing  |
+|**[`showRsyncCommand`](#showRsyncCommand)** | `{Boolean}`  | `false` | Enables/Disables displaying `rsync` command upon start |
+|**[`parseOutput`](#parseOutput)**           | `{Boolean}`  | `false` | Enables/Disables attempting to parse `rsync` output    |
+|**[`include`](#include)**                   | `{String[]}` | `false` | Paths to include                                       |
+|**[`exclude`](#exclude)**                   | `{String[]}` | `false` | Paths to exclude                                       |
+
+### `src`
+if ends with a slash it's contents will be synced into `dest` directory.
+
+Example: `'/users/anon/path/to/project/'`
+
+### `server`
+Optional. If you want to sync to a remote machine. You need to specify the server name.
+
+Example: `'machine.host.org'`
+
+### `initSync`
+By default `synd` waits for a file change to start syncing, set to `true` to start syncing upon running `synd <presetName>`.
+
+Example: `true`
+
+### `gitignores`
+You can use your project and global gitignore to generate `rsync` filter file to avoid syncing not wanted files.
+
+Example: `true`
+
+### `showRsyncCommand`
+`Synd` uses `rsync` under the hood to sync your files. If you want to see what commands it generates set it to true.
+
+Example: `true`
+
+### `include`
+Use this option to specify additional rules to include files to syncing process which otherwise would not be synced.
+
+Example: `['**/test']`
+
+### `exclude`
+Use this option to specify additional rules to exclude files from syncing process which otherwise would be synced.
+
+Example: `['**/.DS_Store', '**/node_modules']`
 
 ## Notes
 
