@@ -1,13 +1,16 @@
 const fs = require('fs');
 
 const startWatchingChanges = data => {
-    fs.watch(
-        data.src,
-        {recursive: true},
-        data.onFileChangeFunc,
-    );
 
-    if (data.initSync !== undefined) data.syncFunc();
+    if (data.watch) {
+        fs.watch(
+            data.src,
+            {recursive: true},
+            data.onFileChangeFunc,
+        );
+    }
+
+    if (data.initSync === true) data.syncFunc();
 
     return data;
 };

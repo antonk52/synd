@@ -4,7 +4,7 @@
   "description": "yet another rsync wrapper",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "bin": {
     "synd": "./bin/synd"
@@ -31,5 +31,10 @@
     "parse-gitignore": "^1.0.1",
     "rsync": "^0.6.1",
     "tinydate": "^1.2.0"
+  },
+  "devDependencies": {
+    "directory-tree": "^2.2.4",
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.0"
   }
 }
