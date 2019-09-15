@@ -12,7 +12,7 @@ const getParsedGitignores = ({src, localGitignore, globalGitignore}) => {
         localGitignoreContent = [
             ...(
                 fs.existsSync(localGitignorePath)
-                    ? parseGitignore(localGitignorePath)
+                    ? parseGitignore(fs.readFileSync(localGitignorePath))
                     : []
             ),
         ];
@@ -24,7 +24,7 @@ const getParsedGitignores = ({src, localGitignore, globalGitignore}) => {
         globalGitignoreContent = [
             ...(
                 fs.existsSync(globalGitignorePath)
-                    ? parseGitignore(globalGitignorePath)
+                    ? parseGitignore(fs.readFileSync(globalGitignorePath))
                     : []
             ),
         ];
