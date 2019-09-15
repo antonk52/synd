@@ -34,6 +34,10 @@ module.exports = {
         // boolean
         // default false
         initSync: true,
+        // watch for changes
+        // boolean
+        // default true
+        watch: true,
         // parse global .gitignore to exclude ignored files
         // boolean
         // default false

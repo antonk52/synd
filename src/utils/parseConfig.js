@@ -1,37 +1,15 @@
-const path = require('path');
 const fs = require('fs');
 
-const getHomeDir = require('./getHomeDir');
 const logErrorExit = require('./logErrorExit');
+const getPresetConfig = require('./getPresetConfig');
 
-const CONFIG_NAME = '.synd.config.js';
+const DEAFULT_CONFIG = {
+    initSync: false,
+    watch: true,
+};
 
 const parseConfig = name => {
-    const configPath = path.resolve(
-        getHomeDir(),
-        CONFIG_NAME,
-    );
-    const wholeConfig = {};
-    const config = {};
-
-    if (!fs.existsSync(configPath)) {
-        logErrorExit(`~/${CONFIG_NAME} does not exist`);
-    }
-
-    try {
-        // eslint-disable-next-line
-        const userConfig = require(configPath);
-        Object.assign(wholeConfig, userConfig);
-    } catch (e) {
-        logErrorExit(`~/${CONFIG_NAME} is invalid`);
-    }
-
-    // preset must exist
-    if (!(name in wholeConfig)) {
-        logErrorExit(`${name} is not in your ${CONFIG_NAME} file`);
-    }
-
-    Object.assign(config, wholeConfig[name]);
+    const config = getPresetConfig();
 
     // src must be set
     if (!config.src && typeof config.src === 'string') {
@@ -53,12 +31,11 @@ const parseConfig = name => {
         ? `${config.server}:${config.dest}`
         : config.dest;
 
-    return {
+    return Object.assign({}, DEAFULT_CONFIG, {
         ...config,
         dest,
-        init: !!config.init,
         name,
-    };
+    });
 };
 
 module.exports = parseConfig;
