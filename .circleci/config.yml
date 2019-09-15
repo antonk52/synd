@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8.9.4
+      - image: andthensome/docker-node-rsync:latest
 
     working_directory: ~/repo
 
