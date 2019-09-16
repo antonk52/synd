@@ -10,10 +10,11 @@ const getPaths = config => {
         .map(removeStartBang);
     const syndExclude = parsedPaths.filter(s => !startsWithBang(s));
 
+    // mixin rules from gitignores
     return {
         ...config,
-        syndExclude,
-        syndInclude,
+        include: config.include.concat(syndInclude),
+        exclude: config.exclude.concat(syndExclude),
     };
 };
 
