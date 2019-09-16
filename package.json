@@ -4,7 +4,9 @@
   "description": "yet another rsync wrapper",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "preversion": "npm run test",
+    "postversion": "npm publish && git push --follow-tags"
   },
   "bin": {
     "synd": "./bin/synd"
