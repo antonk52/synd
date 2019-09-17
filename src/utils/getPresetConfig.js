@@ -1,32 +1,45 @@
 'use strict'
 
 const path = require('path');
+const fs = require('fs');
 
 const getHomeDir = require('./getHomeDir');
+const log = require('./log');
+
+const CONFIG_NAME = '.synd.config.js';
 
 const getPresetConfig = (name) => {
-    const CONFIG_NAME = '.synd.config.js';
+    const homeDir = getHomeDir();
     const configPath = path.resolve(
-        getHomeDir(),
+        homeDir,
         CONFIG_NAME,
     );
     const syndConfig = {};
 
     if (!fs.existsSync(configPath)) {
-        logErrorExit(`~/${CONFIG_NAME} does not exist`);
+        log.errorAndExit(`~/${CONFIG_NAME} does not exist`);
+        return;
     }
 
     try {
-        // eslint-disable-next-line
         const userConfig = require(configPath);
+        if (
+            typeof userConfig !== 'object'
+            || userConfig === null
+            || Array.isArray(userConfig)
+        ) {
+            throw new Error('invalid config');
+        }
         Object.assign(syndConfig, userConfig);
     } catch (e) {
-        logErrorExit(`~/${CONFIG_NAME} is invalid`);
+        log.errorAndExit(`~/${CONFIG_NAME} is invalid`);
+        return;
     }
 
     // preset must exist
     if (!(name in syndConfig)) {
-        logErrorExit(`${name} is not in your ${CONFIG_NAME} file`);
+        log.errorAndExit(`${name} is not in your ${CONFIG_NAME} file`);
+        return;
     }
 
     return syndConfig[name];
