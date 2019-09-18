@@ -3,7 +3,21 @@ const path = require('path');
 const rimraf = require('rimraf');
 const dirTree = require('directory-tree');
 
-const syndProcess = require('../src/utils/syndProcess');
+jest.mock('../src/utils/log', () => () => {});
+jest.mock('../src/rsync/writeToStdout', () => () => {});
+jest.mock('../src/rsync/stdout', () => () => {});
+jest.mock(`../src/utils/getPresetConfig`, () => {
+    const path = require('path');
+    const src = path.resolve('./test/suits/basic/src') + '/';
+    const dest = path.resolve('./test/suits/basic/dest');
+
+    return () => ({
+        src,
+        dest,
+        initSync: true,
+        watch: false,
+    });
+});
 
 function normalizePaths(tree, dirName) {
     tree.path = tree.path
@@ -22,30 +36,22 @@ beforeEach(() => {
     files.forEach(x => rimraf.sync(path.resolve(destPath, x)));
 });
 
-jest.mock(`../src/utils/getPresetConfig`, () => {
-    const path = require('path');
-    const src = path.resolve('./test/suits/basic/src') + '/';
-    const dest = path.resolve('./test/suits/basic/dest');
-
-    return () => ({
-        src,
-        dest,
-        initSync: true,
-        watch: false,
-    });
-});
-
-const execSynd = async ({preset, timeout = 1000}) => {
-    syndProcess(preset)
-
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve();
-        }, timeout);
-    });
-};
 
 describe('directories syncing', () => {
+
+    const syndProcess = require('../src/utils/syndProcess');
+    const execSynd = async ({preset, timeout = 1000}) => {
+        syndProcess(preset)
+
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve();
+            }, timeout);
+        });
+    };
+
+
+
     it('basic', async () => {
         const {children: srcContent} = normalizePaths(
             dirTree('./test/suits/basic/src'),

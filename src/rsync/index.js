@@ -5,6 +5,7 @@ const Rsync = require('rsync');
 
 const stdout = require('./stdout');
 const stderr = require('./stderr');
+const writeToStdout = require('./writeToStdout');
 
 const rsync = obj => {
     const {
@@ -26,7 +27,7 @@ const rsync = obj => {
         .exclude(exclude)
         .include(include)
         .output(
-            parseOutput ? stdout : x => process.stdout.write(String(x)),
+            parseOutput ? stdout : writeToStdout,
             stderr,
         );
 

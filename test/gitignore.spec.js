@@ -5,6 +5,10 @@ const dirTree = require('directory-tree');
 
 const syndProcess = require('../src/utils/syndProcess');
 
+jest.mock('../src/utils/log', () => () => {});
+jest.mock('../src/rsync/writeToStdout', () => () => {});
+jest.mock('../src/rsync/stdout', () => () => {});
+
 function normalizePaths(tree, dirName) {
     tree.path = tree.path
         .replace(`test/suits/gitignore/src`, '')
