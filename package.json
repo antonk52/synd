@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "preversion": "npm run test",
-    "postversion": "npm publish && git push --follow-tags"
+    "postversion": "npm publish && git push --follow-tags",
+    "coveralls": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "bin": {
     "synd": "./bin/synd"
@@ -35,6 +36,7 @@
     "tinydate": "^1.2.0"
   },
   "devDependencies": {
+    "coveralls": "^3.0.6",
     "directory-tree": "^2.2.4",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0"
