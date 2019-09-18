@@ -1,3 +1,10 @@
+## v0.0.5
+Added:
+- more unit tests
+
+Fixed:
+- bug introduced in v0.0.4 with missing 'fs' module
+
 ## v0.0.4
 Added:
 - jest unit test
