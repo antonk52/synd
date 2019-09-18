@@ -1,9 +1,9 @@
-const fs = require('fs');
+const _ = require('lodash');
 
-const logErrorExit = require('./logErrorExit');
 const getPresetConfig = require('./getPresetConfig');
+const validatePresetConfig = require('./validatePresetConfig');
 
-const DEAFULT_CONFIG = {
+const DEFAULT_CONFIG = {
     initSync: false,
     watch: true,
     include: [],
@@ -15,30 +15,17 @@ const DEAFULT_CONFIG = {
 };
 
 const parseConfig = name => {
-    const config = getPresetConfig();
+    const presetConfig = getPresetConfig(name);
 
-    // src must be set
-    if (!config.src && typeof config.src === 'string') {
-        logErrorExit(`Empty 'src' in ${name} preset. Make sure property 'name' is set.`);
-    }
-
-    // src must exist
-    if (!fs.existsSync(config.src)) {
-        logErrorExit(`Invalid 'src' in ${name} preset. Make sure property 'name' is set to a valid path`);
-    }
-
-    // dest must be set
-    if (!config.dest && typeof config.dest === 'string') {
-        logErrorExit(`Empty 'dest' property in ${name}. Make sure property 'dest' is set.`);
-    }
+    validatePresetConfig(presetConfig, name);
 
     // TODO move to pre execute helper
-    const dest = config.server && typeof config.server === 'string'
-        ? `${config.server}:${config.dest}`
-        : config.dest;
+    const dest =
+        presetConfig.server && typeof presetConfig.server === 'string'
+            ? `${presetConfig.server}:${presetConfig.dest}`
+            : presetConfig.dest;
 
-    return Object.assign({}, DEAFULT_CONFIG, {
-        ...config,
+    return Object.assign({}, DEFAULT_CONFIG, _.omit(presetConfig, ['server']), {
         dest,
         name,
     });

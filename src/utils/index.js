@@ -4,7 +4,6 @@ const filterFile = require('./filterFile');
 const getParsedGitignores = require('./getParsedGitignores');
 const getPaths = require('./getPaths');
 const log = require('./log');
-const logErrorExit = require('./logErrorExit');
 const logRsyncCommand = require('./logRsyncCommand');
 const parseConfig = require('./parseConfig');
 const startWatchingChanges = require('./startWatchingChanges');
@@ -18,7 +17,6 @@ module.exports = {
     getParsedGitignores,
     getPaths,
     log,
-    logErrorExit,
     logRsyncCommand,
     parseConfig,
     startWatchingChanges,
