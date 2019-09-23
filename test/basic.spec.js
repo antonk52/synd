@@ -39,7 +39,7 @@ beforeEach(() => {
 
 describe('directories syncing', () => {
 
-    const syndProcess = require('../src/utils/syndProcess');
+    const syndProcess = require('../src/syndProcess');
     const execSynd = async ({preset, timeout = 1000}) => {
         syndProcess(preset)
 

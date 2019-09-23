@@ -2,16 +2,13 @@ const chalk = require('chalk');
 
 const log = require('./log');
 
-const addOnFileChangeFunc = data => {
+const getOnFileChangeFunc = data => {
     function onFileChangeFunc(eventType, filename) {
         log(`${chalk.yellow(eventType)} ${filename}`);
         data.syncFunc();
     }
 
-    return {
-        ...data,
-        onFileChangeFunc,
-    };
+    return onFileChangeFunc;
 };
 
-module.exports = addOnFileChangeFunc;
+module.exports = getOnFileChangeFunc;
