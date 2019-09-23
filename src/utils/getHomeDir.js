@@ -1,3 +1,6 @@
+/* istanbul ignore file */
+'use strict'
+
 const process = require('process');
 
 const getHomeDir = () => (
