@@ -5,16 +5,13 @@ const log = require('./log');
 
 const logDoneUploading = () => log(`${chalk.green('done')}`);
 
-const addSyncFunc = data => {
+const getSyncFunc = data => {
     const syncFunc = debounce(
         () => data.rsyncFunc.execute(logDoneUploading),
         100,
     );
 
-    return {
-        ...data,
-        syncFunc,
-    };
+    return syncFunc;
 };
 
-module.exports = addSyncFunc;
+module.exports = getSyncFunc;

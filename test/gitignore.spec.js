@@ -3,7 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const dirTree = require('directory-tree');
 
-const syndProcess = require('../src/utils/syndProcess');
+const syndProcess = require('../src/syndProcess');
 
 jest.mock('../src/utils/log', () => () => {});
 jest.mock('../src/rsync/writeToStdout', () => () => {});

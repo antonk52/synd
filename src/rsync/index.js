@@ -1,24 +1,21 @@
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
 const Rsync = require('rsync');
 
 const stdout = require('./stdout');
 const stderr = require('./stderr');
 const writeToStdout = require('./writeToStdout');
 
-const rsync = obj => {
-    const {
-        src,
-        dest,
-        exclude = [],
-        include = [],
-        rsyncFilter,
-        parseOutput = true,
-        filterFilePath,
-    } = obj;
-
-    const theThing = new Rsync()
+const rsync = ({
+    src,
+    dest,
+    exclude = [],
+    include = [],
+    rsyncFilter,
+    parseOutput = true,
+    filterFilePath,
+}) => {
+    const rsyncFunc = new Rsync()
         .shell('ssh')
         .flags('az')
         .source(src)
@@ -26,23 +23,17 @@ const rsync = obj => {
         .destination(dest)
         .exclude(exclude)
         .include(include)
-        .output(
-            parseOutput ? stdout : writeToStdout,
-            stderr,
-        );
+        .output(parseOutput ? stdout : writeToStdout, stderr);
 
     if (rsyncFilter && fs.existsSync(path.resolve(src, rsyncFilter))) {
-        theThing.set('filter', `merge ${path.resolve(src, rsyncFilter)}`);
+        rsyncFunc.set('filter', `merge ${path.resolve(src, rsyncFilter)}`);
     }
 
     if (filterFilePath && fs.existsSync(filterFilePath)) {
-        theThing.set('filter', `merge ${filterFilePath}`);
+        rsyncFunc.set('filter', `merge ${filterFilePath}`);
     }
 
-    return {
-        ...obj,
-        rsyncFunc: theThing,
-    };
+    return rsyncFunc;
 };
 
 module.exports = rsync;

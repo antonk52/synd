@@ -6,12 +6,7 @@ const md5 = require('md5');
 const getHomeDir = require('./getHomeDir');
 const log = require('./log');
 
-const filterFile = ({
-    include,
-    exclude,
-    name,
-    ...rest
-}) => {
+const getFilterFile = ({include, exclude, name}) => {
     const content = [
         exclude.map(rule => `- ${rule}`).join('\n'),
         include.map(rule => `+ ${rule}`).join('\n'),
@@ -38,12 +33,7 @@ const filterFile = ({
         log('found filter file, using it', filterFilePath);
     }
 
-    return {
-        include,
-        exclude,
-        filterFilePath,
-        ...rest,
-    };
+    return filterFilePath;
 };
 
-module.exports = filterFile;
+module.exports = getFilterFile;
