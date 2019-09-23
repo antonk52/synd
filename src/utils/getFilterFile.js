@@ -7,6 +7,9 @@ const getHomeDir = require('./getHomeDir');
 const log = require('./log');
 
 const getFilterFile = ({include, exclude, name}) => {
+    if (include.length === 0 && exclude.length === 0) {
+        return null;
+    }
     const content = [
         exclude.map(rule => `- ${rule}`).join('\n'),
         include.map(rule => `+ ${rule}`).join('\n'),
