@@ -1,5 +1,3 @@
-'use strict';
-
 const syndProcess = require('../syndProcess');
 
 jest.mock('../utils', () => ({
@@ -11,7 +9,7 @@ jest.mock('../utils', () => ({
     log: jest.fn(),
 }));
 jest.mock('../rsync', () => jest.fn());
-jest.mock('fs', () => ({watch: jest.fn()}))
+jest.mock('fs', () => ({watch: jest.fn()}));
 
 beforeEach(() => {
     jest.resetAllMocks();
@@ -27,7 +25,7 @@ describe('syndProcess', () => {
             src: 'src',
             dest: 'dest',
             showRsyncCommand: true,
-        }))
+        }));
         syndProcess('foobar');
 
         expect(commandMock.mock.calls.length).toBe(1);
@@ -39,9 +37,11 @@ describe('syndProcess', () => {
             src: 'src/path',
             dest: 'dest',
             watch: true,
-        }))
+        }));
         const sudoOnFileChangeFunc = () => {};
-        const {getOnFileChangeFunc: getOnFileChangeFuncMock} = require('../utils');
+        const {
+            getOnFileChangeFunc: getOnFileChangeFuncMock,
+        } = require('../utils');
         getOnFileChangeFuncMock.mockImplementation(() => sudoOnFileChangeFunc);
         syndProcess('foobar');
 

@@ -23,10 +23,7 @@ const getParsedGitignores = ({src, localGitignore, globalGitignore}) => {
             : [];
     }
 
-    return [
-        ...localGitignoreContent,
-        ...globalGitignoreContent,
-    ];
+    return [...localGitignoreContent, ...globalGitignoreContent];
 };
 
 module.exports = getParsedGitignores;

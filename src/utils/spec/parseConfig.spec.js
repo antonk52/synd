@@ -11,7 +11,7 @@ describe('parseConfig', () => {
             dest: 'dest/path',
         };
         getPresetConfigMock.mockImplementation(() => config);
-        
+
         const result = parseConfig('foo');
 
         expect(result.src).toEqual(config.src);
@@ -25,7 +25,7 @@ describe('parseConfig', () => {
             server: 'server.org',
         };
         getPresetConfigMock.mockImplementation(() => config);
-        
+
         const result = parseConfig('foo');
 
         expect(result.src).toEqual(config.src);

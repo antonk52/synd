@@ -1,5 +1,3 @@
-'use strict';
-
 const getFilterFile = require('../getFilterFile');
 
 jest.mock('path', () => ({resolve: (a, b) => [a, b].join('/')}));
@@ -32,6 +30,8 @@ describe('getFilterFile', () => {
         expect(result).toEqual(expected);
         expect(fsMock.writeFileSync.mock.calls.length).toEqual(1);
         expect(fsMock.writeFileSync.mock.calls[0][0]).toEqual(expected);
-        expect(fsMock.writeFileSync.mock.calls[0][1]).toEqual('- c\n- d\n+ a\n+ b');
+        expect(fsMock.writeFileSync.mock.calls[0][1]).toEqual(
+            '- c\n- d\n+ a\n+ b',
+        );
     });
 });

@@ -7,9 +7,9 @@ jest.mock('../src/utils/log', () => () => {});
 jest.mock('../src/rsync/writeToStdout', () => () => {});
 jest.mock('../src/rsync/stdout', () => () => {});
 jest.mock(`../src/utils/getPresetConfig`, () => {
-    const path = require('path');
-    const src = path.resolve('./test/suits/basic/src') + '/';
-    const dest = path.resolve('./test/suits/basic/dest');
+    const pathL = require('path');
+    const src = `${pathL.resolve('./test/suits/basic/src')}/`;
+    const dest = pathL.resolve('./test/suits/basic/dest');
 
     return () => ({
         src,
@@ -20,12 +20,15 @@ jest.mock(`../src/utils/getPresetConfig`, () => {
 });
 
 function normalizePaths(tree, dirName) {
-    tree.path = tree.path
-        .replace(`test/suits/basic/src`, '')
-        .replace(`test/suits/basic/dest`, '');
+    const result = {
+        ...tree,
+        path: tree.path
+            .replace(`test/suits/basic/src`, '')
+            .replace(`test/suits/basic/dest`, ''),
+    };
     if ('children' in tree)
-        tree.children = tree.children.map(x => normalizePaths(x, dirName));
-    return tree;
+        result.children = tree.children.map(x => normalizePaths(x, dirName));
+    return result;
 }
 
 beforeEach(() => {
@@ -36,12 +39,10 @@ beforeEach(() => {
     files.forEach(x => rimraf.sync(path.resolve(destPath, x)));
 });
 
-
 describe('directories syncing', () => {
-
     const syndProcess = require('../src/syndProcess');
     const execSynd = async ({preset, timeout = 1000}) => {
-        syndProcess(preset)
+        syndProcess(preset);
 
         return new Promise(resolve => {
             setTimeout(() => {
@@ -49,8 +50,6 @@ describe('directories syncing', () => {
             }, timeout);
         });
     };
-
-
 
     it('basic', async () => {
         const {children: srcContent} = normalizePaths(
