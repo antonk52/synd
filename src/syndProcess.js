@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const getRsyncFunc = require('./rsync');
 const {
@@ -25,7 +23,8 @@ const syndProcess = name => {
         filterFilePath,
     });
 
-    if (userConfig.showRsyncCommand) log(`rsync command\n\n${rsyncFunc.command()}`);
+    if (userConfig.showRsyncCommand)
+        log(`rsync command\n\n${rsyncFunc.command()}`);
 
     const syncFunc = getSyncFunc({rsyncFunc});
     const onFileChangeFunc = getOnFileChangeFunc({syncFunc});

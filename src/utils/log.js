@@ -5,7 +5,8 @@ const tinydate = require('tinydate');
 
 const stamp = tinydate('[{HH}:{mm}:{ss}]');
 
-const log = string => process.stdout.write(`${chalk.gray(stamp())} ${string}\n`);
+const log = string =>
+    process.stdout.write(`${chalk.gray(stamp())} ${string}\n`);
 
 const errorAndExit = reason => {
     const output = [
@@ -20,7 +21,4 @@ const errorAndExit = reason => {
     process.exit(1);
 };
 
-module.exports = Object.assign(
-    log,
-    {errorAndExit}
-);
+module.exports = Object.assign(log, {errorAndExit});

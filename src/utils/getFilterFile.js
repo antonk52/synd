@@ -20,7 +20,7 @@ const getFilterFile = ({include, exclude, name}) => {
     const filterDirPath = path.resolve(getHomeDir(), '.synd');
 
     if (!fs.existsSync(filterDirPath)) {
-        log('.synd dir not present, so let\'s create it');
+        log(".synd dir not present, so let's create it");
         fs.mkdirSync(filterDirPath);
     }
 

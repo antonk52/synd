@@ -25,10 +25,7 @@ const parseConfig = name => {
             ? `${presetConfig.server}:${presetConfig.dest}`
             : presetConfig.dest;
 
-    return Object.assign({}, DEFAULT_CONFIG, _.omit(presetConfig, ['server']), {
-        dest,
-        name,
-    });
+    return {...DEFAULT_CONFIG, ..._.omit(presetConfig, ['server']), dest, name};
 };
 
 module.exports = parseConfig;

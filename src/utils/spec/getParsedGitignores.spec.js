@@ -1,5 +1,3 @@
-'use strict';
-
 const getParsedGitignores = require('../getParsedGitignores');
 
 jest.mock('parse-gitignore', () => jest.fn());
