@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
-const getPresetConfig = require('./getPresetConfig');
 const validatePresetConfig = require('./validatePresetConfig');
+const log = require('./log');
 
 const DEFAULT_CONFIG = {
     initSync: false,
@@ -13,9 +13,14 @@ const DEFAULT_CONFIG = {
     parseOutput: false,
     showRsyncCommand: false,
 };
+const CONFIG_NAME = '.synd.config.js';
 
-const parseConfig = name => {
-    const presetConfig = getPresetConfig(name);
+const parseConfig = (syndConfig, name) => {
+    if (!(name in syndConfig)) {
+        log.errorAndExit(`${name} is not in your ${CONFIG_NAME} file`);
+        return null;
+    }
+    const presetConfig = syndConfig[name];
 
     validatePresetConfig(presetConfig, name);
 

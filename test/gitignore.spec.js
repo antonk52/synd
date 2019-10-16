@@ -39,22 +39,24 @@ beforeEach(() => {
     files.forEach(x => rimraf.sync(path.resolve(destPath, x)));
 });
 
-jest.mock(`../src/utils/getPresetConfig`, () => {
+jest.mock(`../src/utils/getConfig`, () => {
     const pathl = require('path');
     const src = `${pathl.resolve('./test/suits/gitignore/src')}/`;
     const dest = pathl.resolve('./test/suits/gitignore/dest');
 
     return () => ({
-        src,
-        dest,
-        localGitignore: true,
-        initSync: true,
-        watch: false,
+        gitignore: {
+            src,
+            dest,
+            localGitignore: true,
+            initSync: true,
+            watch: false,
+        },
     });
 });
 
 const execSynd = async (timeout = 1000) => {
-    syndProcess();
+    syndProcess('gitignore', {});
 
     return new Promise(resolve => {
         setTimeout(() => {

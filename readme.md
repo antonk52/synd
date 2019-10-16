@@ -92,3 +92,9 @@ Example: `['**/.DS_Store', '**/node_modules']`
 ## Notes
 
 After you run synd it will generate a filter file for your project and place it in `~/.synd/presetName.[hash].filter`. If file already exists synd will use it instead.
+
+You can also see a list of all your presets by running
+
+```
+synd --list
+```
