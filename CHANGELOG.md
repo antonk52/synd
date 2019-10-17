@@ -1,3 +1,8 @@
+## v0.0.6
+Added:
+- `--list` flag to display names of all available presets
+- eslint
+
 ## v0.0.5
 Added:
 - more unit tests
