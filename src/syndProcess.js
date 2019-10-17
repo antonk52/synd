@@ -3,16 +3,30 @@ const getRsyncFunc = require('./rsync');
 const {
     getOnFileChangeFunc,
     getSyncFunc,
+    getConfig,
     getFilterFile,
     getPaths,
     parseConfig,
     log,
 } = require('./utils');
 
-const syndProcess = name => {
+const syndProcess = (name, cmd) => {
+    const syndConfig = getConfig();
+
+    if (cmd.list === true) {
+        log.plain(`Your presets:`);
+        log.plain(
+            Object.keys(syndConfig)
+                .map(k => `- ${k}`)
+                .join('\n'),
+        );
+    }
+
+    if (name === undefined) return null;
+
     log(`Going to try to do the "${name}" preset`);
 
-    const userConfig = parseConfig(name);
+    const userConfig = parseConfig(syndConfig, name);
     const userConfigWithFullIncludeExclude = getPaths(userConfig);
     const filterFilePath = getFilterFile(userConfigWithFullIncludeExclude);
 

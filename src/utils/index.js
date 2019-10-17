@@ -1,3 +1,4 @@
+const getConfig = require('./getConfig');
 const getOnFileChangeFunc = require('./getOnFileChangeFunc');
 const getSyncFunc = require('./getSyncFunc');
 const getFilterFile = require('./getFilterFile');
@@ -7,9 +8,10 @@ const log = require('./log');
 const parseConfig = require('./parseConfig');
 
 module.exports = {
+    getConfig,
+    getFilterFile,
     getOnFileChangeFunc,
     getSyncFunc,
-    getFilterFile,
     getParsedGitignores,
     getPaths,
     log,

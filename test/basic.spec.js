@@ -6,16 +6,18 @@ const dirTree = require('directory-tree');
 jest.mock('../src/utils/log', () => () => {});
 jest.mock('../src/rsync/writeToStdout', () => () => {});
 jest.mock('../src/rsync/stdout', () => () => {});
-jest.mock(`../src/utils/getPresetConfig`, () => {
+jest.mock(`../src/utils/getConfig`, () => {
     const pathL = require('path');
     const src = `${pathL.resolve('./test/suits/basic/src')}/`;
     const dest = pathL.resolve('./test/suits/basic/dest');
 
     return () => ({
-        src,
-        dest,
-        initSync: true,
-        watch: false,
+        basic: {
+            src,
+            dest,
+            initSync: true,
+            watch: false,
+        },
     });
 });
 
@@ -42,7 +44,7 @@ beforeEach(() => {
 describe('directories syncing', () => {
     const syndProcess = require('../src/syndProcess');
     const execSynd = async ({preset, timeout = 1000}) => {
-        syndProcess(preset);
+        syndProcess(preset, {});
 
         return new Promise(resolve => {
             setTimeout(() => {
