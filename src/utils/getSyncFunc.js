@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const {debounce} = require('lodash');
+const debounce = require('lodash.debounce');
 
 const log = require('./log');
 
