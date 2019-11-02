@@ -13,7 +13,7 @@ const stdout = buffer => {
     // eliminate upload info
     const files = output.filter(f => {
         if (
-            /\d{1,2}kB\/s/g.test(f) ||
+            /\d{1,}[KMGkmg]?[bB]\/s/g.test(f) ||
             f.includes('building file list') ||
             f.includes('files to consider') ||
             f.includes('bytes  received') ||
