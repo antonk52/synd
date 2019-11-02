@@ -1,3 +1,8 @@
+## v0.0.7
+Fixed:
+- Improved rsync output parsing
+- package size is over 2 times smaller due to removing full lodash
+
 ## v0.0.6
 Added:
 - `--list` flag to display names of all available presets
