@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const validatePresetConfig = require('./validatePresetConfig');
 const log = require('./log');
 
@@ -14,6 +12,8 @@ const DEFAULT_CONFIG = {
     showRsyncCommand: false,
 };
 const CONFIG_NAME = '.synd.config.js';
+
+const omitServerProp = ({server, ...rest}) => rest;
 
 const parseConfig = (syndConfig, name) => {
     if (!(name in syndConfig)) {
@@ -30,7 +30,7 @@ const parseConfig = (syndConfig, name) => {
             ? `${presetConfig.server}:${presetConfig.dest}`
             : presetConfig.dest;
 
-    return {...DEFAULT_CONFIG, ..._.omit(presetConfig, ['server']), dest, name};
+    return {...DEFAULT_CONFIG, ...omitServerProp(presetConfig), dest, name};
 };
 
 module.exports = parseConfig;
