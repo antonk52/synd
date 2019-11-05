@@ -1,10 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const md5 = require('md5');
-
 const getHomeDir = require('./getHomeDir');
 const log = require('./log');
+const getMd5Hash = require('./getMd5Hash');
 
 const getFilterFile = ({include, exclude, name}) => {
     if (include.length === 0 && exclude.length === 0) {
@@ -15,7 +14,7 @@ const getFilterFile = ({include, exclude, name}) => {
         include.map(rule => `+ ${rule}`).join('\n'),
     ].join('\n');
 
-    const hash = md5(content);
+    const hash = getMd5Hash(content);
 
     const filterDirPath = path.resolve(getHomeDir(), '.synd');
 
