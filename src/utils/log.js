@@ -1,10 +1,12 @@
 /* istanbul ignore file */
 const process = require('process');
-
 const chalk = require('chalk');
-const tinydate = require('tinydate');
 
-const stamp = tinydate('[{HH}:{mm}:{ss}]');
+const stamp = () => {
+    const d = new Date();
+
+    return `[${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}]`;
+};
 
 const log = string =>
     process.stdout.write(`${chalk.gray(stamp())} ${string}\n`);
