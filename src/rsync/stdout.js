@@ -1,4 +1,4 @@
-const chalk = require('chalk');
+const kleur = require('kleur');
 
 const {log} = require('../utils');
 
@@ -30,7 +30,7 @@ const stdout = buffer => {
         return true;
     });
 
-    files.forEach(name => log(`${chalk.yellow('uploading')}  ${name}`));
+    files.forEach(name => log(`${kleur.yellow('uploading')}  ${name}`));
 };
 
 module.exports = stdout;

@@ -1,7 +1,7 @@
 const getOnFileChangeFunc = require('../getOnFileChangeFunc');
 
 jest.mock('../log', () => jest.fn());
-jest.mock('chalk', () => ({yellow: jest.fn(x => x)}));
+jest.mock('kleur', () => ({yellow: jest.fn(x => x)}));
 
 describe('getOnFileChangeFunc', () => {
     it('should return a valid function', () => {
