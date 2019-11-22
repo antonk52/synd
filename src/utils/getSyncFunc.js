@@ -1,9 +1,9 @@
-const chalk = require('chalk');
+const kleur = require('kleur');
 const debounce = require('lodash.debounce');
 
 const log = require('./log');
 
-const logDoneUploading = () => log(`${chalk.green('done')}`);
+const logDoneUploading = () => log(`${kleur.green('done')}`);
 
 const getSyncFunc = data => {
     const syncFunc = debounce(

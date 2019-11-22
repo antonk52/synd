@@ -1,7 +1,7 @@
 const getFilterFile = require('../getFilterFile');
 
 jest.mock('path', () => ({resolve: (a, b) => [a, b].join('/')}));
-jest.mock('md5', () => () => 'HASH');
+jest.mock('../getMd5Hash', () => () => 'HASH');
 jest.mock('../getHomeDir', () => () => 'HOMEDIR');
 jest.mock('../log', () => () => {});
 jest.mock('fs', () => ({

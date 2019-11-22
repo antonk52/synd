@@ -28,13 +28,11 @@
   },
   "homepage": "https://github.com/antonk52/synd#readme",
   "dependencies": {
-    "chalk": "^2.4.2",
     "commander": "^3.0.0",
+    "kleur": "^3.0.3",
     "lodash.debounce": "^4.0.8",
-    "md5": "^2.2.1",
     "parse-gitignore": "^1.0.1",
-    "rsync": "^0.6.1",
-    "tinydate": "^1.2.0"
+    "rsync": "^0.6.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
