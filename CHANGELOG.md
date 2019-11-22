@@ -1,3 +1,7 @@
+## v0.0.8
+Improved:
+- removed unnecessary dependencies
+
 ## v0.0.7
 Fixed:
 - Improved rsync output parsing
