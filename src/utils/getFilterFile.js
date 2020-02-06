@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const getHomeDir = require('./getHomeDir');
+const os = require('os');
 const log = require('./log');
 const getMd5Hash = require('./getMd5Hash');
 
@@ -16,7 +16,7 @@ const getFilterFile = ({include, exclude, name}) => {
 
     const hash = getMd5Hash(content);
 
-    const filterDirPath = path.resolve(getHomeDir(), '.synd');
+    const filterDirPath = path.resolve(os.homedir(), '.synd');
 
     if (!fs.existsSync(filterDirPath)) {
         log(".synd dir not present, so let's create it");

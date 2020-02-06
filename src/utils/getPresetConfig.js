@@ -1,13 +1,13 @@
 const path = require('path');
 const fs = require('fs');
 
-const getHomeDir = require('./getHomeDir');
+const os = require('os');
 const log = require('./log');
 
 const CONFIG_NAME = '.synd.config.js';
 
 const getPresetConfig = name => {
-    const homeDir = getHomeDir();
+    const homeDir = os.homedir();
     const configPath = path.resolve(homeDir, CONFIG_NAME);
     const syndConfig = {};
 
