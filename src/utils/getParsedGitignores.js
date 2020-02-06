@@ -1,9 +1,8 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
 const parseGitignore = require('parse-gitignore');
-
-const getHomeDir = require('./getHomeDir');
 
 // TODO: log warning when gitignore does not exist
 const getParsedGitignores = ({src, localGitignore, globalGitignore}) => {
@@ -17,7 +16,7 @@ const getParsedGitignores = ({src, localGitignore, globalGitignore}) => {
 
     let globalGitignoreContent = [];
     if (globalGitignore) {
-        const globalGitignorePath = path.join(getHomeDir(), '.gitignore');
+        const globalGitignorePath = path.join(os.homedir(), '.gitignore');
         globalGitignoreContent = fs.existsSync(globalGitignorePath)
             ? parseGitignore(fs.readFileSync(globalGitignorePath))
             : [];

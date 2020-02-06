@@ -1,12 +1,12 @@
 const getPresetConfig = require('../getPresetConfig');
 
 jest.mock('../log', () => ({errorAndExit: jest.fn()}));
-jest.mock('../getHomeDir', () =>
-    jest
+jest.mock('os', () => ({
+    homedir: jest
         .fn()
         .mockImplementationOnce(() => 'non/existing/path')
         .mockImplementation(() => 'src/utils/spec'),
-);
+}));
 // has to be a valid path, so jest wont complain
 jest.mock('./.synd.config.js', () => ({
     lol: {
