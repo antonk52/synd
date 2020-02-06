@@ -1,3 +1,16 @@
+.git/
+
+# for npm
+node_modules/
+npm-shrinkwrap.json
+npm-debug.log
+
+# misc
+example/
+.gitignore
+.editorconfig
+
+coverage
 test
 **/spec
 .circleci
