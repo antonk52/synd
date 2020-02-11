@@ -2,6 +2,7 @@
 [![npm version](https://badge.fury.io/js/synd.svg)](https://badge.fury.io/js/synd)
 [![CircleCI](https://circleci.com/gh/antonk52/synd.svg?style=shield)](https://circleci.com/gh/antonk52/synd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![install size](https://packagephobia.now.sh/badge?p=synd)](https://packagephobia.now.sh/result?p=synd)
 [![Coverage Status](https://coveralls.io/repos/github/antonk52/synd/badge.svg?branch=master)](https://coveralls.io/github/antonk52/synd?branch=master)
 
 Opinionated rsync wrapper written in javascript.
