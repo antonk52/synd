@@ -1,3 +1,8 @@
+## v0.0.9
+Improved:
+- set process title
+- npm ignore from publishing excessive stuff
+
 ## v0.0.8
 Improved:
 - removed unnecessary dependencies
