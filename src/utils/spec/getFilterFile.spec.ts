@@ -1,9 +1,12 @@
-const getFilterFile = require('../getFilterFile');
+import {getFilterFile} from '../getFilterFile';
 
-jest.mock('path', () => ({resolve: (a, b) => [a, b].join('/')}));
-jest.mock('../getMd5Hash', () => () => 'HASH');
-jest.mock('os', () => ({homedir: () => 'HOMEDIR'}));
-jest.mock('../log', () => () => {});
+jest.mock('path', () => ({
+    resolve: (a: string, b: string): string => [a, b].join('/'),
+}));
+jest.mock('../getMd5Hash', () => ({getMd5Hash: (): string => 'HASH'}));
+jest.mock('os', () => ({homedir: (): string => 'HOMEDIR'}));
+// eslint-disable-next-line
+jest.mock('../log', () => (): void => {});
 jest.mock('fs', () => ({
     existsSync: jest.fn(),
     mkdirSync: jest.fn(),
@@ -12,7 +15,7 @@ jest.mock('fs', () => ({
 
 describe('getFilterFile', () => {
     it('should return null when include and exclude are empty arrays', () => {
-        const result = getFilterFile({include: [], exclude: []});
+        const result = getFilterFile({name: 'foo', include: [], exclude: []});
         const expected = null;
 
         expect(result).toEqual(expected);

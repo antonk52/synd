@@ -1,23 +1,15 @@
 module.exports = {
-    env: {
-        commonjs: true,
-        es6: true,
-        node: true,
-    },
-    plugins: ['jest', 'prettier'],
-    extends: ['airbnb-base', 'plugin:prettier/recommended'],
-    globals: {
-        Atomics: 'readonly',
-        SharedArrayBuffer: 'readonly',
-    },
-    env: {
-        'jest/globals': true,
-    },
-    parserOptions: {
-        ecmaVersion: 2018,
-    },
+    root: true,
+    extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:prettier/recommended',
+        'prettier/@typescript-eslint',
+    ],
+    plugins: ['@typescript-eslint', 'prettier'],
+    parser: '@typescript-eslint/parser',
     rules: {
-        'prettier/prettier': 'error',
+        '@typescript-eslint/no-var-requires': 0,
     },
     overrides: [
         {

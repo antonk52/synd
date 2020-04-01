@@ -1,0 +1,32 @@
+import kleur from 'kleur';
+
+import {log} from '../utils';
+
+export function onStdout(buffer: Buffer): void {
+    // break the buffer into an array of strings
+    const output = `${buffer}`
+        .trim()
+        .replace('/{2,}/g', '\n')
+        .replace('/\t{1,}/g', '\n')
+        .split('\n');
+
+    // eliminate upload info
+    const files = output.filter(
+        f =>
+            !(
+                /\d{1,}[KMGkmg]?[bB]\/s/g.test(f) ||
+                f.includes('building file list') ||
+                f.includes('files to consider') ||
+                f.includes('bytes  received') ||
+                f.includes('total size') ||
+                f.includes('speedup is') ||
+                f.includes('to-check=') ||
+                f.includes('files...') ||
+                f.includes('xfer#1,') ||
+                f === '' ||
+                f === './'
+            ),
+    );
+
+    files.forEach(name => log(`${kleur.yellow('uploading')}  ${name}`));
+}

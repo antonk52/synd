@@ -1,19 +1,19 @@
-const path = require('path');
-const fs = require('fs');
-const os = require('os');
+import path from 'path';
+import fs from 'fs';
+import os from 'os';
 
-const log = require('./log');
+import log from './log';
+import {SyndConfig} from '../types';
 
 const CONFIG_NAME = '.synd.config.js';
 
-const getConfig = () => {
+export const getConfig = (): SyndConfig | never => {
     const homeDir = os.homedir();
     const configPath = path.resolve(homeDir, CONFIG_NAME);
     const syndConfig = {};
 
     if (!fs.existsSync(configPath)) {
         log.errorAndExit(`~/${CONFIG_NAME} does not exist`);
-        return null;
     }
 
     try {
@@ -29,10 +29,7 @@ const getConfig = () => {
         Object.assign(syndConfig, userConfig);
     } catch (e) {
         log.errorAndExit(`~/${CONFIG_NAME} is invalid`);
-        return null;
     }
 
     return syndConfig;
 };
-
-module.exports = getConfig;

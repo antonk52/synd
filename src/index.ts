@@ -1,7 +1,7 @@
-const program = require('commander');
-const {version} = require('../package.json');
+import program from 'commander';
+import {syndProcess} from './syndProcess';
 
-const syndProcess = require('./syndProcess');
+const {version} = require('../package.json');
 
 program
     .option('--list', 'list all presets')
