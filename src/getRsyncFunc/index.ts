@@ -36,7 +36,7 @@ export function getRsyncFunc({
         .shell('ssh')
         .flags('az')
         .source(src)
-        .set('progress')
+        .set('out-format', '%n')
         .destination(dest)
         .exclude(exclude)
         .include(include)
