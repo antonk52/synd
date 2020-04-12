@@ -17,5 +17,6 @@ coverage
 test
 **/spec
 .circleci
+.github
 .eslintrc.js
 prettier.config.js
