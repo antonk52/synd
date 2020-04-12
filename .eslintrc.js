@@ -13,7 +13,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: ['*.spec.js'],
+            files: ['*.spec.ts', '*.spec.js'],
             rules: {
                 'global-require': 'off',
             },

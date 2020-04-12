@@ -1,4 +1,7 @@
 .git/
+# do not publish ts source files to npm,
+# we have github for that
+src
 
 # for npm
 node_modules/

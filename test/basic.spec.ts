@@ -57,7 +57,7 @@ describe('directories syncing', () => {
         preset,
         timeout = 1000,
     }: {
-        preset: any;
+        preset: string;
         timeout?: number;
     }): Promise<() => Promise<void>> => {
         syndProcess(preset, {});
