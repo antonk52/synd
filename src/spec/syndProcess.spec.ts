@@ -23,6 +23,11 @@ jest.mock('process', () => ({
 
 beforeEach(() => {
     jest.restoreAllMocks();
+
+    const {log} = require('../utils');
+    log.mockRestore();
+    const fs = require('fs');
+    fs.watch.mockRestore();
 });
 
 describe('syndProcess', () => {
@@ -70,5 +75,44 @@ describe('syndProcess', () => {
         expect(() => syndProcess(undefined, {list: true})).toThrowError('0');
         expect(log.plain.mock.calls.length).toBe(2);
         expect(log.plain.mock.calls[1][0]).toBe('- a\n- b');
+    });
+    it('should exit when preset is not in the config', () => {
+        const {getConfig} = require('../utils');
+        const {log} = require('../utils');
+        getConfig.mockImplementation(() => ({
+            a: {},
+        }));
+
+        expect(() => syndProcess(undefined, {})).toThrowError('0');
+        expect(log.mock.calls).toEqual([
+            [
+                'Preset name is missing, exiting. Run "synd <preset-name>". Exiting',
+            ],
+        ]);
+    });
+    it('should set up recursive file watcher, when watch is on', () => {
+        const fs = require('fs');
+        const debounce = require('lodash.debounce');
+        const {getRsyncFunc} = require('../getRsyncFunc');
+        debounce.mockImplementationOnce((cb: Function) => cb);
+        const execute = jest.fn();
+        getRsyncFunc.mockImplementationOnce(() => ({execute}));
+
+        let cb: void | Function;
+
+        fs.watch.mockImplementationOnce(
+            (pth: string, opts: {}, callback: Function): void => {
+                cb = callback;
+            },
+        );
+
+        expect(() => syndProcess('foo', {})).not.toThrow();
+        expect(fs.watch.mock.calls).toHaveLength(1);
+        expect(fs.watch.mock.calls[0][0]).toBe('src/path');
+        expect(fs.watch.mock.calls[0][1]).toEqual({recursive: true});
+        expect(fs.watch.mock.calls[0][2]).toBeInstanceOf(Function);
+
+        expect(() => cb && cb()).not.toThrow();
+        expect(execute.mock.calls).toHaveLength(1);
     });
 });
