@@ -5,20 +5,11 @@ import os from 'os';
 import log from './log';
 import {SyndConfig} from '../types';
 
-const CONFIG_NAME = '.synd.config.js';
+const CONFIG_NAME = 'synd.config.js';
 
-export const getConfig = (): SyndConfig | never => {
-    const homeDir = os.homedir();
-    const configPath = path.resolve(homeDir, CONFIG_NAME);
-    const syndConfig = {};
-
-    if (!fs.existsSync(configPath)) {
-        log.errorAndExit(`~/${CONFIG_NAME} does not exist`);
-    }
-
+const load = (configPath: string): SyndConfig | never => {
     try {
-        /* eslint-disable-next-line */
-        const userConfig = require(configPath);
+        const userConfig = require(configPath) as SyndConfig;
         if (
             typeof userConfig !== 'object' ||
             userConfig === null ||
@@ -26,10 +17,26 @@ export const getConfig = (): SyndConfig | never => {
         ) {
             throw new Error('invalid config');
         }
-        Object.assign(syndConfig, userConfig);
+        return userConfig;
     } catch (e) {
-        log.errorAndExit(`~/${CONFIG_NAME} is invalid`);
+        return log.errorAndExit(`${configPath} is not a valid synd config`);
+    }
+};
+
+export const getConfig = (): SyndConfig | never => {
+    if (process.env.XDG_CONFIG_HOME) {
+        const configPath = path.join(process.env.XDG_CONFIG_HOME, CONFIG_NAME);
+        if (fs.existsSync(configPath)) {
+            return load(configPath);
+        }
+    }
+    const configPath = path.resolve(os.homedir(), CONFIG_NAME);
+
+    if (!fs.existsSync(configPath)) {
+        return log.errorAndExit(
+            `${CONFIG_NAME} does not exist, please create one to use synd`,
+        );
     }
 
-    return syndConfig;
+    return load(configPath);
 };
