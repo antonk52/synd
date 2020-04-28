@@ -10,7 +10,8 @@ function parseGitignore(filepath: string): string[] {
         .trim()
         .split(/\r?\n/)
         .filter(x => !x.startsWith('#'))
-        .map(x => x.trim());
+        .map(x => x.trim())
+        .filter(Boolean);
 }
 
 type Params = {
