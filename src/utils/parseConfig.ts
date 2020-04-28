@@ -1,7 +1,9 @@
-const validatePresetConfig = require('./validatePresetConfig');
-const log = require('./log');
+import {validatePresetConfig} from './validatePresetConfig';
+import log from './log';
 
-const DEFAULT_CONFIG = {
+import {OptionalPresetFields, SyndConfig, ValidatedPreset} from '../types';
+
+const DEFAULT_CONFIG: OptionalPresetFields = {
     initSync: false,
     watch: true,
     include: [],
@@ -13,12 +15,18 @@ const DEFAULT_CONFIG = {
 };
 const CONFIG_NAME = '.synd.config.js';
 
-const omitServerProp = ({server, ...rest}) => rest;
+const omitServerProp = <T extends {[key: string]: unknown}>({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    server,
+    ...rest
+}: T): Omit<T, 'server'> => rest;
 
-const parseConfig = (syndConfig, name) => {
+export const parseConfig = (
+    syndConfig: SyndConfig,
+    name: string,
+): ValidatedPreset => {
     if (!(name in syndConfig)) {
         log.errorAndExit(`${name} is not in your ${CONFIG_NAME} file`);
-        return null;
     }
     const presetConfig = syndConfig[name];
 
@@ -32,5 +40,3 @@ const parseConfig = (syndConfig, name) => {
 
     return {...DEFAULT_CONFIG, ...omitServerProp(presetConfig), dest, name};
 };
-
-module.exports = parseConfig;

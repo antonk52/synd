@@ -1,34 +1,44 @@
-const fs = require('fs');
-const path = require('path');
-const rimraf = require('rimraf');
-const dirTree = require('directory-tree');
+import fs from 'fs';
+import path from 'path';
+import rimraf from 'rimraf';
+import dirTree from 'directory-tree';
 
-jest.mock('../src/utils/log', () => () => {});
-jest.mock('../src/rsync/writeToStdout', () => () => {});
-jest.mock('../src/rsync/stdout', () => () => {});
-jest.mock(`../src/utils/getConfig`, () => {
-    const pathL = require('path');
-    const src = `${pathL.resolve('./test/suits/basic/src')}/`;
-    const dest = pathL.resolve('./test/suits/basic/dest');
-
-    return () => ({
-        basic: {
-            src,
-            dest,
-            initSync: true,
-            watch: false,
+/* eslint-disable */
+jest.mock('../src/utils/log', () =>
+    Object.assign((): void => {}, {
+        errorAndExit: (msg: string) => {
+            throw new Error(msg);
         },
-    });
-});
+    }),
+);
+jest.mock(`../src/utils/getConfig`, () => ({
+    getConfig: () => {
+        const pathL = require('path');
+        const src = `${pathL.resolve('./test/suits/basic/src')}/`;
+        const dest = pathL.resolve('./test/suits/basic/dest');
 
-function normalizePaths(tree, dirName) {
+        return {
+            basic: {
+                src,
+                dest,
+                initSync: true,
+                watch: false,
+            },
+        };
+    },
+}));
+/* eslint-enable */
+function normalizePaths(
+    tree: dirTree.DirectoryTree,
+    dirName: string,
+): dirTree.DirectoryTree {
     const result = {
         ...tree,
         path: tree.path
             .replace(`test/suits/basic/src`, '')
             .replace(`test/suits/basic/dest`, ''),
     };
-    if ('children' in tree)
+    if ('children' in tree && tree.children !== undefined)
         result.children = tree.children.map(x => normalizePaths(x, dirName));
     return result;
 }
@@ -42,8 +52,14 @@ beforeEach(() => {
 });
 
 describe('directories syncing', () => {
-    const syndProcess = require('../src/syndProcess');
-    const execSynd = async ({preset, timeout = 1000}) => {
+    const {syndProcess} = require('../src/syndProcess');
+    const execSynd = async ({
+        preset,
+        timeout = 1000,
+    }: {
+        preset: string;
+        timeout?: number;
+    }): Promise<() => Promise<void>> => {
         syndProcess(preset, {});
 
         return new Promise(resolve => {

@@ -2,12 +2,15 @@
   "name": "synd",
   "version": "0.0.9",
   "description": "yet another rsync wrapper",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint src test",
-    "preversion": "npm run test",
+    "build": "rm -rf ./dist && tsc",
+    "lint": "eslint src test --ext=.js,.ts",
+    "preversion": "npm run test && npm run build",
     "postversion": "npm publish && git push --follow-tags",
+    "types": "tsc --noEmit",
+    "types:watch": "tsc --noEmit --watch",
     "coveralls": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "bin": {
@@ -27,24 +30,35 @@
     "url": "https://github.com/antonk52/synd/issues"
   },
   "homepage": "https://github.com/antonk52/synd#readme",
+  "engines": {
+    "node": ">=8"
+  },
   "dependencies": {
     "commander": "^3.0.0",
     "kleur": "^3.0.3",
     "lodash.debounce": "^4.0.8",
-    "parse-gitignore": "^1.0.1",
     "rsync": "^0.6.1"
   },
   "devDependencies": {
-    "coveralls": "^3.0.6",
+    "@types/jest": "^25.2.1",
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/node": "^13.11.1",
+    "@types/rimraf": "^3.0.0",
+    "@types/rsync": "^0.4.30",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "coveralls": "^3.0.11",
     "directory-tree": "^2.2.4",
-    "eslint": "^6.4.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.17.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "jest": "^24.9.0",
-    "prettier": "1.18.2",
-    "rimraf": "^3.0.0"
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^25.3.0",
+    "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.3.1",
+    "typescript": "^3.8.3"
   }
 }

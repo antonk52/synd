@@ -1,33 +1,54 @@
-const fs = require('fs');
-const path = require('path');
-const rimraf = require('rimraf');
-const dirTree = require('directory-tree');
+import fs from 'fs';
+import path from 'path';
+import rimraf from 'rimraf';
+import dirTree from 'directory-tree';
 
-const syndProcess = require('../src/syndProcess');
+import {syndProcess} from '../src/syndProcess';
 
+/* eslint-disable */
 jest.mock('../src/utils/log', () => () => {});
-jest.mock('../src/rsync/writeToStdout', () => () => {});
-jest.mock('../src/rsync/stdout', () => () => {});
+jest.mock(`../src/utils/getConfig`, () => ({
+    getConfig: (): any => {
+        const pathl = require('path');
+        const src = `${pathl.resolve('./test/suits/gitignore/src')}/`;
+        const dest = pathl.resolve('./test/suits/gitignore/dest');
 
-function normalizePaths(tree, dirName) {
+        return {
+            gitignore: {
+                src,
+                dest,
+                localGitignore: true,
+                initSync: true,
+                watch: false,
+            },
+        };
+    },
+}));
+/* eslint-enable */
+
+function normalizePaths(
+    tree: dirTree.DirectoryTree,
+    dirName: string,
+): dirTree.DirectoryTree {
     const result = {
         ...tree,
         path: tree.path
             .replace(`test/suits/gitignore/src`, '')
             .replace(`test/suits/gitignore/dest`, ''),
     };
-    if ('children' in tree)
+    if ('children' in tree && tree.children !== undefined)
         result.children = tree.children.map(x => normalizePaths(x, dirName));
     return result;
 }
 
-function getAllPaths(tree) {
-    const paths = [];
-    function pushToTree(obj) {
+function getAllPaths(tree: dirTree.DirectoryTree): string[] {
+    const paths: string[] = [];
+    function pushToTree(obj: dirTree.DirectoryTree): void {
         if (obj.type === 'file') paths.push(obj.path);
-        if ('children' in obj) obj.children.forEach(o => pushToTree(o));
+        if ('children' in obj && obj.children !== undefined)
+            obj.children.forEach(o => pushToTree(o));
     }
-    tree.children.forEach(pushToTree);
+    if (tree.children !== undefined) tree.children.forEach(pushToTree);
     return paths;
 }
 
@@ -39,22 +60,7 @@ beforeEach(() => {
     files.forEach(x => rimraf.sync(path.resolve(destPath, x)));
 });
 
-jest.mock(`../src/utils/getConfig`, () => {
-    const pathl = require('path');
-    const src = `${pathl.resolve('./test/suits/gitignore/src')}/`;
-    const dest = pathl.resolve('./test/suits/gitignore/dest');
-
-    return () => ({
-        gitignore: {
-            src,
-            dest,
-            localGitignore: true,
-            initSync: true,
-            watch: false,
-        },
-    });
-});
-
+// eslint-disable-next-line
 const execSynd = async (timeout = 1000) => {
     syndProcess('gitignore', {});
 

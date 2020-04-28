@@ -1,4 +1,4 @@
-const validatePresetConfig = require('../validatePresetConfig');
+import {validatePresetConfig} from '../validatePresetConfig';
 
 jest.mock('../log', () => ({
     errorAndExit: jest.fn(arg => {
@@ -21,13 +21,15 @@ describe('validatePresetConfig function', () => {
             dest: 'another',
         };
 
-        let result = validatePresetConfig(minimalConfig);
+        let result: void;
 
         expect(() => {
             result = validatePresetConfig(minimalConfig, PRESET_NAME);
         }).not.toThrow();
         expect(mockLog.errorAndExit.mock.calls.length).toBe(0);
-        expect(result).toBe(true);
+        // eslint-disable-next-line
+        // @ts-ignore
+        expect(result).toBe(undefined);
     });
 
     it('should log error and exit when src property does not exist', () => {
@@ -37,6 +39,8 @@ describe('validatePresetConfig function', () => {
             dest: 'another',
         };
 
+        // eslint-disable-next-line
+        // @ts-ignore
         expect(() => validatePresetConfig(minimalConfig, PRESET_NAME)).toThrow(
             Error(
                 "Empty 'src' in PRESET_NAME preset. Make sure property 'name' is set.",
@@ -67,6 +71,8 @@ describe('validatePresetConfig function', () => {
             dest: null,
         };
 
+        // eslint-disable-next-line
+        // @ts-ignore
         expect(() => validatePresetConfig(minimalConfig, PRESET_NAME)).toThrow(
             Error(
                 `Invalid 'dest' property in "PRESET_NAME". Make sure property 'dest' is set to a valid path.`,

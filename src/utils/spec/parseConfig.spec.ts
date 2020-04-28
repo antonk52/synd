@@ -1,6 +1,6 @@
-const parseConfig = require('../parseConfig');
+import {parseConfig} from '../parseConfig';
 
-jest.mock('../validatePresetConfig', () => jest.fn());
+jest.mock('../validatePresetConfig', () => ({validatePresetConfig: jest.fn()}));
 jest.mock('../log', () => ({errorAndExit: jest.fn()}));
 
 describe('parseConfig', () => {
@@ -27,11 +27,12 @@ describe('parseConfig', () => {
     });
     it('should log and exit when preset is not in the config', () => {
         const {errorAndExit} = require('../log');
-        const result = parseConfig({}, 'preset_name');
+        errorAndExit.mockImplementationOnce((msg: string) => {
+            throw new Error(msg);
+        });
+        // const result = parseConfig({}, 'preset_name');
 
-        expect(result).toEqual(null);
-        expect(errorAndExit.mock.calls.length).toBe(1);
-        expect(errorAndExit.mock.calls[0][0]).toBe(
+        expect(() => parseConfig({}, 'preset_name')).toThrowError(
             'preset_name is not in your .synd.config.js file',
         );
     });

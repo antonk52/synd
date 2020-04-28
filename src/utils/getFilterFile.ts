@@ -1,14 +1,25 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const os = require('os');
-const log = require('./log');
-const getMd5Hash = require('./getMd5Hash');
+import os from 'os';
+import log from './log';
+import {getMd5Hash} from './getMd5Hash';
 
-const getFilterFile = ({include, exclude, name}) => {
+type Params = {
+    include: string[];
+    exclude: string[];
+    name: string;
+};
+
+export const getFilterFile = ({
+    include,
+    exclude,
+    name,
+}: Params): string | null => {
     if (include.length === 0 && exclude.length === 0) {
         return null;
     }
+    // TODO swap excludes with includes
     const content = [
         exclude.map(rule => `- ${rule}`).join('\n'),
         include.map(rule => `+ ${rule}`).join('\n'),
@@ -32,10 +43,8 @@ const getFilterFile = ({include, exclude, name}) => {
 
         fs.writeFileSync(filterFilePath, content);
     } else {
-        log('found filter file, using it', filterFilePath);
+        log(`found filter file, using it "${filterFilePath}"`);
     }
 
     return filterFilePath;
 };
-
-module.exports = getFilterFile;

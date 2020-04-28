@@ -2,4 +2,4 @@
 
 process.title = 'synd';
 
-require('../src');
+require('../dist');
