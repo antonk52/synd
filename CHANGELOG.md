@@ -1,3 +1,16 @@
+## v0.1.1
+Improved:
+- fixed filtering for empty lines in gitignore files
+
+## v0.1.0
+Improved:
+- migration to typescript
+- moved from circleci to githubactions
+- support for XDG_CONFIG_HOME to store synd config
+
+Breaking changes:
+- synd config name changed from `.synd.config.js` to `synd.config.js`
+
 ## v0.0.9
 Improved:
 - set process title
