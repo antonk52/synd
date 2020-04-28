@@ -17,11 +17,11 @@ describe('getParsedGitignores', () => {
         expect(result).toEqual(expected);
     });
 
-    it('should return the same result as returned from `parse-gitignore` function', () => {
+    it('should return filter out comments and empty lines', () => {
         const fsMock = require('fs');
         fsMock.existsSync.mockImplementation(() => true);
         fsMock.readFileSync.mockImplementation(() =>
-            ['# comment', 'a', '!b'].join('\n'),
+            ['# comment', '', 'a', '!b'].join('\n'),
         );
 
         const result = getParsedGitignores({
