@@ -59,12 +59,12 @@ describe('directories syncing', () => {
     }: {
         preset: string;
         timeout?: number;
-    }): Promise<() => Promise<void>> => {
+    }): Promise<void> => {
         syndProcess(preset, {});
 
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve();
+                resolve(undefined);
             }, timeout);
         });
     };
