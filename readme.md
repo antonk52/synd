@@ -15,7 +15,7 @@ npm install --global synd
 
 ## Usage
 
-Create a `~/.synd.config.js` file in your home directory with a configuration preset for your project.
+Create a `~/synd.config.js` file in your home directory with a configuration preset for your project.
 
 ```js
 module.exports = {

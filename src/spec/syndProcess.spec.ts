@@ -30,6 +30,9 @@ beforeEach(() => {
     fs.watch.mockRestore();
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyFunction = (...args: any[]) => any;
+
 describe('syndProcess', () => {
     it('should show rsync command when "showRsyncCommand" is set to true', () => {
         const {getRsyncFunc} = require('../getRsyncFunc');
@@ -94,14 +97,19 @@ describe('syndProcess', () => {
         const fs = require('fs');
         const debounce = require('lodash.debounce');
         const {getRsyncFunc} = require('../getRsyncFunc');
-        debounce.mockImplementationOnce((cb: Function) => cb);
+        debounce.mockImplementationOnce((cb: AnyFunction) => cb);
         const execute = jest.fn();
         getRsyncFunc.mockImplementationOnce(() => ({execute}));
 
-        let cb: void | Function;
+        let cb: void | AnyFunction;
 
         fs.watch.mockImplementationOnce(
-            (pth: string, opts: {}, callback: Function): void => {
+            (
+                _pth: string,
+                // object that has no fields
+                _opts: Record<string, never>,
+                callback: AnyFunction,
+            ): void => {
                 cb = callback;
             },
         );
