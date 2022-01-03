@@ -1,4 +1,5 @@
 import fs from 'fs';
+import process from 'process';
 import path from 'path';
 
 import os from 'os';
@@ -11,15 +12,16 @@ type Params = {
     name: string;
 };
 
-function getFilterDirPath(): string {
-    const version: string = require('../../package.json').version;
+const version: string = require('../../package.json').version;
+
+export function getFilterDirPath(process: typeof import('process')): string {
     if (process.env.XDG_CACHE_HOME) {
-        return path.resolve(process.env.XDG_CACHE_HOME, 'synd', version);
+        return path.join(process.env.XDG_CACHE_HOME, 'synd', version);
     }
 
     const cacheDir = path.join(os.homedir(), '.cache');
     if (fs.existsSync(cacheDir)) {
-        return path.resolve(cacheDir, 'synd', version);
+        return path.join(cacheDir, 'synd', version);
     }
 
     return path.resolve(os.homedir(), '.synd');
@@ -41,7 +43,7 @@ export const getFilterFile = ({
 
     const hash = getMd5Hash(content);
 
-    const filterDirPath = getFilterDirPath();
+    const filterDirPath = getFilterDirPath(process);
 
     if (!fs.existsSync(filterDirPath)) {
         log("synd cache dir not present, so let's create it");

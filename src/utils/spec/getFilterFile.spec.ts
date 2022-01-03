@@ -1,9 +1,12 @@
-import {getFilterFile} from '../getFilterFile';
+import {getFilterFile, getFilterDirPath} from '../getFilterFile';
+import fs from 'fs';
 
 jest.mock('path', () => ({
     resolve: (a: string, b: string): string => [a, b].join('/'),
+    join: (...strs: string[]): string => strs.join('/'),
 }));
 jest.mock('../getMd5Hash', () => ({getMd5Hash: (): string => 'HASH'}));
+jest.mock('../../../package.json', () => ({version: 'VERSION'}));
 jest.mock('os', () => ({homedir: (): string => 'HOMEDIR'}));
 // eslint-disable-next-line
 jest.mock('../log', () => (): void => {});
@@ -12,6 +15,33 @@ jest.mock('fs', () => ({
     mkdirSync: jest.fn(),
     writeFileSync: jest.fn(),
 }));
+jest.mock('process', () => ({env: {}}));
+
+describe('getFilterDirPath', () => {
+    it('XDG PATH', () => {
+        const result = getFilterDirPath({
+            env: {XDG_CACHE_HOME: 'XDG_CACHE_HOME'},
+        } as any as NodeJS.Process);
+
+        expect(result).toEqual('XDG_CACHE_HOME/synd/VERSION');
+    });
+
+    it('cache home dir', () => {
+        (fs.existsSync as jest.Mock).mockReturnValueOnce(true);
+        const result = getFilterDirPath({
+            env: {},
+        } as any as NodeJS.Process);
+
+        expect(result).toEqual('HOMEDIR/.cache/synd/VERSION');
+    });
+
+    it('home dir', () => {
+        (fs.existsSync as jest.Mock).mockReturnValueOnce(false);
+        const result = getFilterDirPath({env: {}} as any);
+
+        expect(result).toEqual('HOMEDIR/.synd');
+    });
+});
 
 describe('getFilterFile', () => {
     it('should return null when include and exclude are empty arrays', () => {
