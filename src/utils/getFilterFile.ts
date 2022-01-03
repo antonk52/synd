@@ -11,6 +11,20 @@ type Params = {
     name: string;
 };
 
+function getFilterDirPath(): string {
+    const version: string = require('../../package.json').version;
+    if (process.env.XDG_CACHE_HOME) {
+        return path.resolve(process.env.XDG_CACHE_HOME, 'synd', version);
+    }
+
+    const cacheDir = path.join(os.homedir(), '.cache');
+    if (fs.existsSync(cacheDir)) {
+        return path.resolve(cacheDir, 'synd', version);
+    }
+
+    return path.resolve(os.homedir(), '.synd');
+}
+
 export const getFilterFile = ({
     include,
     exclude,
@@ -27,11 +41,11 @@ export const getFilterFile = ({
 
     const hash = getMd5Hash(content);
 
-    const filterDirPath = path.resolve(os.homedir(), '.synd');
+    const filterDirPath = getFilterDirPath();
 
     if (!fs.existsSync(filterDirPath)) {
-        log(".synd dir not present, so let's create it");
-        fs.mkdirSync(filterDirPath);
+        log("synd cache dir not present, so let's create it");
+        fs.mkdirSync(filterDirPath, {recursive: true});
     }
 
     const filterFileName = `${name}.${hash}.filter`;
