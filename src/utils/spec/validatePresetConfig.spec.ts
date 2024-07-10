@@ -1,21 +1,28 @@
+import {vi, beforeEach, describe, it, expect} from 'vitest';
 import {validatePresetConfig} from '../validatePresetConfig';
 
-jest.mock('../log', () => ({
-    errorAndExit: jest.fn(arg => {
+vi.mock('../log', () => {
+    const errorAndExit = vi.fn(arg => {
         throw Error(arg);
-    }),
-}));
+    });
+    return {
+        default: {
+            errorAndExit,
+        },
+        errorAndExit,
+    };
+});
 
-beforeEach(() => {
-    const mock = require('../log');
-    mock.errorAndExit.mockClear();
+beforeEach(async () => {
+    const mock = await import('../log');
+    (mock as any).errorAndExit.mockClear();
 });
 
 describe('validatePresetConfig function', () => {
     const PRESET_NAME = 'PRESET_NAME';
 
-    it('should return true for a minimal valid config', () => {
-        const mockLog = require('../log');
+    it('should return true for a minimal valid config', async () => {
+        const mockLog = await import('../log');
         const minimalConfig = {
             src: 'src/utils/spec',
             dest: 'another',
@@ -26,14 +33,14 @@ describe('validatePresetConfig function', () => {
         expect(() => {
             result = validatePresetConfig(minimalConfig, PRESET_NAME);
         }).not.toThrow();
-        expect(mockLog.errorAndExit.mock.calls.length).toBe(0);
+        expect((mockLog as any).errorAndExit.mock.calls.length).toBe(0);
         // eslint-disable-next-line
         // @ts-ignore
         expect(result).toBe(undefined);
     });
 
-    it('should log error and exit when src property does not exist', () => {
-        const mockLog = require('../log');
+    it('should log error and exit when src property does not exist', async () => {
+        const mockLog = await import('../log');
         const minimalConfig = {
             src: null,
             dest: 'another',
@@ -46,11 +53,11 @@ describe('validatePresetConfig function', () => {
                 "Empty 'src' in PRESET_NAME preset. Make sure property 'name' is set.",
             ),
         );
-        expect(mockLog.errorAndExit.mock.calls.length).toBe(1);
+        expect((mockLog as any).errorAndExit.mock.calls.length).toBe(1);
     });
 
-    it('should log error and exit when src does not exist', () => {
-        const mockLog = require('../log');
+    it('should log error and exit when src does not exist', async () => {
+        const mockLog = await import('../log');
         const minimalConfig = {
             src: 'non existing path',
             dest: 'another',
@@ -61,11 +68,11 @@ describe('validatePresetConfig function', () => {
                 "Invalid 'src' in PRESET_NAME preset. Make sure property 'name' is set to a valid path",
             ),
         );
-        expect(mockLog.errorAndExit.mock.calls.length).toBe(1);
+        expect((mockLog as any).errorAndExit.mock.calls.length).toBe(1);
     });
 
-    it('should log error and exit when dest is not a string', () => {
-        const mockLog = require('../log');
+    it('should log error and exit when dest is not a string', async () => {
+        const mockLog = await import('../log');
         const minimalConfig = {
             src: 'src/utils/spec',
             dest: null,
@@ -78,6 +85,6 @@ describe('validatePresetConfig function', () => {
                 `Invalid 'dest' property in "PRESET_NAME". Make sure property 'dest' is set to a valid path.`,
             ),
         );
-        expect(mockLog.errorAndExit.mock.calls.length).toBe(1);
+        expect((mockLog as any).errorAndExit.mock.calls.length).toBe(1);
     });
 });

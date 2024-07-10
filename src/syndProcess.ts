@@ -10,7 +10,10 @@ type Options = {
 };
 
 export const syndProcess = (name: string | void, cmd: Options): void => {
+    console.log(0, {getConfigCalls: getConfig.mock.calls});
     const syndConfig = getConfig();
+
+    console.log(1, {getConfigCalls: getConfig.mock.calls, syndConfig});
 
     if (cmd.list === true) {
         log.plain(`Your presets:`);
@@ -22,6 +25,7 @@ export const syndProcess = (name: string | void, cmd: Options): void => {
 
         process.exit(0);
     }
+    console.log(2);
 
     if (name === undefined) {
         log(
@@ -29,6 +33,7 @@ export const syndProcess = (name: string | void, cmd: Options): void => {
         );
         process.exit(0);
     }
+    console.log(3, {syndConfig});
 
     log(`Going to try to do the "${name}" preset`);
 
@@ -36,12 +41,15 @@ export const syndProcess = (name: string | void, cmd: Options): void => {
      * validated preset with defaults
      */
     const userConfig = parseConfig(syndConfig, name);
+    console.log(3.11, {parseConfig, mock: parseConfig.mock.calls});
     const {include, exclude} = getPaths(userConfig);
+    console.log(3.2, userConfig);
     const filterFilePath = getFilterFile({
-        name: userConfig.name,
+        name: userConfig?.name,
         include,
         exclude,
     });
+    console.log(3.3);
 
     log(`about to sync \n\t${userConfig.src} to \n\t${userConfig.dest}\n\n`);
 

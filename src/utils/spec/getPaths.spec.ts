@@ -1,6 +1,7 @@
+import {vi, describe, it, expect} from 'vitest';
 import {getPaths} from '../getPaths';
 
-jest.mock('../getParsedGitignores', () => ({getParsedGitignores: jest.fn()}));
+vi.mock('../getParsedGitignores', () => ({getParsedGitignores: vi.fn()}));
 
 describe('getPaths', () => {
     const commonParams = {
@@ -8,9 +9,9 @@ describe('getPaths', () => {
         globalGitignore: false,
         src: 'valid/path',
     };
-    it('should return values from gitignore files', () => {
-        const {getParsedGitignores} = require('../getParsedGitignores');
-        getParsedGitignores.mockImplementation(() => [
+    it('should return values from gitignore files', async () => {
+        const {getParsedGitignores} = await import('../getParsedGitignores');
+        (getParsedGitignores as any).mockImplementation(() => [
             '!path/to/include',
             'path/to/ignore',
         ]);
@@ -24,9 +25,9 @@ describe('getPaths', () => {
         expect(result).toEqual(expected);
     });
 
-    it('should return values from user preset', () => {
-        const {getParsedGitignores} = require('../getParsedGitignores');
-        getParsedGitignores.mockImplementation(() => []);
+    it('should return values from user preset', async () => {
+        const {getParsedGitignores} = await import('../getParsedGitignores');
+        (getParsedGitignores as any).mockImplementation(() => []);
 
         const result = getPaths({
             ...commonParams,
@@ -41,9 +42,9 @@ describe('getPaths', () => {
         expect(result).toEqual(expected);
     });
 
-    it('should return mixin values from gitignore files and user preset', () => {
-        const {getParsedGitignores} = require('../getParsedGitignores');
-        getParsedGitignores.mockImplementation(() => [
+    it('should return mixin values from gitignore files and user preset', async () => {
+        const {getParsedGitignores} = await import('../getParsedGitignores');
+        (getParsedGitignores as any).mockImplementation(() => [
             '!include/from/gitignores',
             'exclude/from/gitignores',
         ]);

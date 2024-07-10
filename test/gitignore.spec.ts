@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
@@ -6,8 +7,8 @@ import dirTree from 'directory-tree';
 import {syndProcess} from '../src/syndProcess';
 
 /* eslint-disable */
-jest.mock('../src/utils/log', () => () => {});
-jest.mock(`../src/utils/getConfig`, () => ({
+vi.mock('../src/utils/log', () => () => {});
+vi.mock(`../src/utils/getConfig`, () => ({
     getConfig: (): any => {
         const pathl = require('path');
         const src = `${pathl.resolve('./test/suits/gitignore/src')}/`;

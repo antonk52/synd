@@ -1,44 +1,56 @@
-import {syndProcess} from '../syndProcess';
+import {vi, describe, it, expect, beforeEach} from 'vitest';
 
-jest.mock('../utils', () => ({
-    getOnFileChangeFunc: jest.fn(),
-    getSyncFunc: jest.fn(),
-    getFilterFile: jest.fn(),
-    getPaths: jest.fn(() => ({include: [], exclude: []})),
-    getConfig: jest.fn(),
-    parseConfig: jest.fn(),
-    log: Object.assign(jest.fn(), {plain: jest.fn()}),
+vi.mock('../utils/getConfig', () => ({
+    getConfig: vi.fn(() => {
+        name: 'mocked-project';
+    }),
 }));
-jest.mock('lodash.debounce', () => jest.fn());
-jest.mock('../getRsyncFunc', () => ({
-    getRsyncFunc: jest.fn(),
+vi.mock('../utils', async importOriginal => ({
+    // @ts-expect-error: test
+    ...(await importOriginal()),
+    getOnFileChangeFunc: vi.fn(),
+    getSyncFunc: vi.fn(),
+    getFilterFile: vi.fn(),
+    getPaths: vi.fn(() => ({include: [], exclude: []})),
+    parseConfig: vi.fn(),
+    log: Object.assign(vi.fn(), {plain: vi.fn()}),
 }));
-jest.mock('fs', () => ({watch: jest.fn()}));
-jest.mock('process', () => ({
+vi.mock('lodash.debounce', () => ({default: vi.fn()}));
+vi.mock('../getRsyncFunc', () => ({
+    getRsyncFunc: vi.fn(),
+}));
+vi.mock('fs', () => {
+    const watch = vi.fn();
+    return {default: {watch}, watch};
+});
+vi.mock('process', () => ({
     // eslint-disable-next-line
     exit: (code: number) => {
         throw new Error(code.toString());
     },
 }));
 
-beforeEach(() => {
-    jest.restoreAllMocks();
+beforeEach(async () => {
+    vi.restoreAllMocks();
 
-    const {log} = require('../utils');
-    log.mockRestore();
-    const fs = require('fs');
-    fs.watch.mockRestore();
+    const {log} = await import('../utils');
+    (log as any).mockRestore();
+    const fs = await import('fs');
+    (fs.watch as any).mockRestore();
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyFunction = (...args: any[]) => any;
 
 describe('syndProcess', () => {
-    it('should show rsync command when "showRsyncCommand" is set to true', () => {
-        const {getRsyncFunc} = require('../getRsyncFunc');
+    it('should show rsync command when "showRsyncCommand" is set to true', async () => {
+        const {getRsyncFunc} = await import('../getRsyncFunc');
+        const {syndProcess} = await import('../syndProcess');
         const commandMock = jest.fn();
+        // @ts-expect-error mock
         getRsyncFunc.mockImplementation(() => ({command: commandMock}));
-        const {parseConfig: parseConfigMock} = require('../utils');
+        const {parseConfig: parseConfigMock} = await import('../utils');
+        // @ts-expect-error mock
         parseConfigMock.mockImplementation(() => ({
             src: 'src',
             dest: 'dest',
@@ -48,9 +60,10 @@ describe('syndProcess', () => {
 
         expect(commandMock.mock.calls.length).toBe(1);
     });
-    it('should start watching for changes when "watch" is set to true', () => {
-        const fs = require('fs');
-        const {parseConfig: parseConfigMock} = require('../utils');
+    it('should start watching for changes when "watch" is set to true', async () => {
+        const fs = await import('fs');
+        const {syndProcess} = await import('../syndProcess');
+        const {parseConfig: parseConfigMock} = await import('../utils');
         parseConfigMock.mockImplementation(() => ({
             src: 'src/path',
             dest: 'dest',
@@ -58,7 +71,7 @@ describe('syndProcess', () => {
         }));
         // eslint-disable-next-line
         const sudoOnFileChangeFunc = () => {};
-        const debounce = require('lodash.debounce');
+        const debounce = await import('lodash.debounce');
         debounce.mockImplementation(() => sudoOnFileChangeFunc);
         syndProcess('foobar', {});
 
@@ -67,21 +80,23 @@ describe('syndProcess', () => {
         expect(fs.watch.mock.calls[0][0]).toEqual('src/path');
         expect(fs.watch.mock.calls[0][1]).toEqual({recursive: true});
     });
-    it('should list presets when the flag is passed', () => {
-        const {getConfig} = require('../utils');
-        getConfig.mockImplementation(() => ({
+    it('should list presets when the flag is passed', async () => {
+        const {getConfig} = await import('../utils');
+        const {syndProcess} = await import('../syndProcess');
+        getConfig.default.mockImplementation(() => ({
             a: {},
             b: {},
         }));
-        const {log} = require('../utils');
+        const {log} = await import('../utils');
 
         expect(() => syndProcess(undefined, {list: true})).toThrowError('0');
         expect(log.plain.mock.calls.length).toBe(2);
         expect(log.plain.mock.calls[1][0]).toBe('- a\n- b');
     });
-    it('should exit when preset is not in the config', () => {
-        const {getConfig} = require('../utils');
-        const {log} = require('../utils');
+    it('should exit when preset is not in the config', async () => {
+        const {getConfig} = await import('../utils');
+        const {log} = await import('../utils');
+        const {syndProcess} = await import('../syndProcess');
         getConfig.mockImplementation(() => ({
             a: {},
         }));
@@ -93,16 +108,20 @@ describe('syndProcess', () => {
             ],
         ]);
     });
-    it('should set up recursive file watcher, when watch is on', () => {
-        const fs = require('fs');
-        const debounce = require('lodash.debounce');
-        const {getRsyncFunc} = require('../getRsyncFunc');
-        debounce.mockImplementationOnce((cb: AnyFunction) => cb);
-        const execute = jest.fn();
+    it.only('should set up recursive file watcher, when watch is on', async () => {
+        const fs = await import('fs');
+        const debounce = await import('lodash.debounce');
+        const {getRsyncFunc} = await import('../getRsyncFunc');
+        const {syndProcess} = await import('../syndProcess');
+        // @ts-expect-error: mock
+        debounce.default.mockImplementationOnce((cb: AnyFunction) => cb);
+        const execute = vi.fn();
+        // @ts-expect-error: mock
         getRsyncFunc.mockImplementationOnce(() => ({execute}));
 
         let cb: void | AnyFunction;
 
+        // @ts-expect-error: mock
         fs.watch.mockImplementationOnce(
             (
                 _pth: string,
@@ -114,10 +133,20 @@ describe('syndProcess', () => {
             },
         );
 
+        try {
+            syndProcess('foo', {});
+        } catch (e) {
+            console.log('ERROR HERE', e);
+        }
+
         expect(() => syndProcess('foo', {})).not.toThrow();
+        // @ts-expect-error: mock
         expect(fs.watch.mock.calls).toHaveLength(1);
+        // @ts-expect-error: mock
         expect(fs.watch.mock.calls[0][0]).toBe('src/path');
+        // @ts-expect-error: mock
         expect(fs.watch.mock.calls[0][1]).toEqual({recursive: true});
+        // @ts-expect-error: mock
         expect(fs.watch.mock.calls[0][2]).toBeInstanceOf(Function);
 
         expect(() => cb && cb()).not.toThrow();

@@ -1,17 +1,18 @@
+import {vi} from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
 import dirTree from 'directory-tree';
 
 /* eslint-disable */
-jest.mock('../src/utils/log', () =>
+vi.mock('../src/utils/log', () =>
     Object.assign((): void => {}, {
         errorAndExit: (msg: string) => {
             throw new Error(msg);
         },
     }),
 );
-jest.mock(`../src/utils/getConfig`, () => ({
+vi.mock(`../src/utils/getConfig`, () => ({
     getConfig: () => {
         const pathL = require('path');
         const src = `${pathL.resolve('./test/suits/basic/src')}/`;
