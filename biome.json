@@ -7,6 +7,9 @@
     "enabled": true,
     "rules": {
       "suspicious": {
+        "noConfusingVoidType": {
+          "level": "off"
+        },
         "noExplicitAny": {
           "level": "off"
         }

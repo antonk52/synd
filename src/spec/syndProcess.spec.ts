@@ -101,7 +101,7 @@ describe('syndProcess', () => {
         const execute = jest.fn();
         getRsyncFunc.mockImplementationOnce(() => ({execute}));
 
-        let cb: undefined | AnyFunction;
+        let cb: void | AnyFunction;
 
         fs.watch.mockImplementationOnce(
             (

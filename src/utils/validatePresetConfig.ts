@@ -6,7 +6,7 @@ import type {Preset} from '../types';
 export const validatePresetConfig = (
     preset: Preset,
     name: string,
-): undefined | never => {
+): void | never => {
     // src must be set
     if (typeof preset.src !== 'string') {
         log.errorAndExit(

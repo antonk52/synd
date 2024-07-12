@@ -9,7 +9,7 @@ type Options = {
     list?: boolean;
 };
 
-export const syndProcess = (name: string | undefined, cmd: Options): void => {
+export const syndProcess = (name: string | void, cmd: Options): void => {
     const syndConfig = getConfig();
 
     if (cmd.list === true) {
