@@ -1,5 +1,5 @@
 import {getFilterFile, getFilterDirPath} from '../getFilterFile';
-import fs from 'fs';
+import fs from 'node:fs';
 
 jest.mock('path', () => ({
     resolve: (a: string, b: string): string => [a, b].join('/'),
@@ -52,7 +52,7 @@ describe('getFilterFile', () => {
     });
 
     it('should call fs.writeFileSync with given params', () => {
-        const fsMock = require('fs');
+        const fsMock = require('node:fs');
         const result = getFilterFile({
             include: ['a', 'b'],
             exclude: ['c', 'd'],

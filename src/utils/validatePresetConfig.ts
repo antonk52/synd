@@ -1,12 +1,12 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import log from './log';
 
-import {Preset} from '../types';
+import type {Preset} from '../types';
 
 export const validatePresetConfig = (
     preset: Preset,
     name: string,
-): void | never => {
+): undefined | never => {
     // src must be set
     if (typeof preset.src !== 'string') {
         log.errorAndExit(

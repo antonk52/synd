@@ -20,10 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/antonk52/synd.git"
   },
-  "keywords": [
-    "rsync",
-    "cli"
-  ],
+  "keywords": ["rsync", "cli"],
   "author": "antonk52",
   "license": "MIT",
   "bugs": {
@@ -31,7 +28,7 @@
   },
   "homepage": "https://github.com/antonk52/synd#readme",
   "engines": {
-    "node": ">=12"
+    "node": ">=14.18"
   },
   "dependencies": {
     "commander": "^8.3.0",

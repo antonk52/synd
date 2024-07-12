@@ -26,7 +26,7 @@ beforeEach(() => {
 
     const {log} = require('../utils');
     log.mockRestore();
-    const fs = require('fs');
+    const fs = require('node:fs');
     fs.watch.mockRestore();
 });
 
@@ -49,7 +49,7 @@ describe('syndProcess', () => {
         expect(commandMock.mock.calls.length).toBe(1);
     });
     it('should start watching for changes when "watch" is set to true', () => {
-        const fs = require('fs');
+        const fs = require('node:fs');
         const {parseConfig: parseConfigMock} = require('../utils');
         parseConfigMock.mockImplementation(() => ({
             src: 'src/path',
@@ -94,14 +94,14 @@ describe('syndProcess', () => {
         ]);
     });
     it('should set up recursive file watcher, when watch is on', () => {
-        const fs = require('fs');
+        const fs = require('node:fs');
         const debounce = require('lodash.debounce');
         const {getRsyncFunc} = require('../getRsyncFunc');
         debounce.mockImplementationOnce((cb: AnyFunction) => cb);
         const execute = jest.fn();
         getRsyncFunc.mockImplementationOnce(() => ({execute}));
 
-        let cb: void | AnyFunction;
+        let cb: undefined | AnyFunction;
 
         fs.watch.mockImplementationOnce(
             (
@@ -120,7 +120,7 @@ describe('syndProcess', () => {
         expect(fs.watch.mock.calls[0][1]).toEqual({recursive: true});
         expect(fs.watch.mock.calls[0][2]).toBeInstanceOf(Function);
 
-        expect(() => cb && cb()).not.toThrow();
+        expect(() => cb?.()).not.toThrow();
         expect(execute.mock.calls).toHaveLength(1);
     });
 });

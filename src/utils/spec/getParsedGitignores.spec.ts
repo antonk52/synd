@@ -18,7 +18,7 @@ describe('getParsedGitignores', () => {
     });
 
     it('should return filter out comments and empty lines', () => {
-        const fsMock = require('fs');
+        const fsMock = require('node:fs');
         fsMock.existsSync.mockImplementation(() => true);
         fsMock.readFileSync.mockImplementation(() =>
             ['# comment', '', 'a', '!b'].join('\n'),
@@ -35,7 +35,7 @@ describe('getParsedGitignores', () => {
     });
 
     it('should return concatenated array of results returned from `parse-gitignore` function', () => {
-        const fsMock = require('fs');
+        const fsMock = require('node:fs');
         fsMock.existsSync.mockImplementation(() => true);
         fsMock.readFileSync.mockImplementationOnce(() =>
             ['a', '!b'].join('\n'),
@@ -55,7 +55,7 @@ describe('getParsedGitignores', () => {
     });
 
     it('should return an empty array when .gitignore files do not exist', () => {
-        const fsMock = require('fs');
+        const fsMock = require('node:fs');
         fsMock.existsSync.mockImplementation(() => false);
 
         const result = getParsedGitignores({

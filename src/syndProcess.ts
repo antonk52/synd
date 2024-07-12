@@ -1,6 +1,6 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import kleur from 'kleur';
-import process from 'process';
+import process from 'node:process';
 import debounce from 'lodash.debounce';
 import {getRsyncFunc} from './getRsyncFunc';
 import {getConfig, getFilterFile, getPaths, parseConfig, log} from './utils';
@@ -9,11 +9,11 @@ type Options = {
     list?: boolean;
 };
 
-export const syndProcess = (name: string | void, cmd: Options): void => {
+export const syndProcess = (name: string | undefined, cmd: Options): void => {
     const syndConfig = getConfig();
 
     if (cmd.list === true) {
-        log.plain(`Your presets:`);
+        log.plain('Your presets:');
         log.plain(
             Object.keys(syndConfig)
                 .map(k => `- ${k}`)

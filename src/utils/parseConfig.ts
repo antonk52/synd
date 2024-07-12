@@ -1,7 +1,7 @@
 import {validatePresetConfig} from './validatePresetConfig';
 import log from './log';
 
-import {OptionalPresetFields, SyndConfig, ValidatedPreset} from '../types';
+import type {OptionalPresetFields, SyndConfig, ValidatedPreset} from '../types';
 
 const DEFAULT_CONFIG: OptionalPresetFields = {
     initSync: false,

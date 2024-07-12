@@ -1,8 +1,8 @@
-import fs from 'fs';
-import process from 'process';
-import path from 'path';
+import fs from 'node:fs';
+import process from 'node:process';
+import path from 'node:path';
 
-import os from 'os';
+import os from 'node:os';
 import log from './log';
 import {getMd5Hash} from './getMd5Hash';
 

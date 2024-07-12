@@ -21,7 +21,7 @@ describe('validatePresetConfig function', () => {
             dest: 'another',
         };
 
-        let result: void;
+        let result: undefined;
 
         expect(() => {
             result = validatePresetConfig(minimalConfig, PRESET_NAME);

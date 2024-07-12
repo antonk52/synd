@@ -3,6 +3,16 @@
   "organizeImports": {
     "enabled": false
   },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "suspicious": {
+        "noExplicitAny": {
+          "level": "off"
+        }
+      }
+    }
+  },
   "javascript": {
     "formatter": {
       "indentStyle": "space",
@@ -10,6 +20,12 @@
       "quoteStyle": "single",
       "arrowParentheses": "asNeeded",
       "bracketSpacing": false
+    }
+  },
+  "json": {
+    "formatter": {
+      "indentStyle": "space",
+      "indentWidth": 2
     }
   }
 }

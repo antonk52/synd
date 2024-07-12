@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import rimraf from 'rimraf';
 import dirTree from 'directory-tree';
 
@@ -11,9 +11,9 @@ jest.mock('../src/utils/log', () =>
         },
     }),
 );
-jest.mock(`../src/utils/getConfig`, () => ({
+jest.mock('../src/utils/getConfig', () => ({
     getConfig: () => {
-        const pathL = require('path');
+        const pathL = require('node:path');
         const src = `${pathL.resolve('./test/suits/basic/src')}/`;
         const dest = pathL.resolve('./test/suits/basic/dest');
 
@@ -35,8 +35,8 @@ function normalizePaths(
     const result = {
         ...tree,
         path: tree.path
-            .replace(`test/suits/basic/src`, '')
-            .replace(`test/suits/basic/dest`, ''),
+            .replace('test/suits/basic/src', '')
+            .replace('test/suits/basic/dest', ''),
     };
     if ('children' in tree && tree.children !== undefined)
         result.children = tree.children.map(x => normalizePaths(x, dirName));
@@ -48,7 +48,9 @@ beforeEach(() => {
     if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
     const files = fs.readdirSync(destPath) || [];
 
-    files.forEach(x => rimraf.sync(path.resolve(destPath, x)));
+    for (const file of files) {
+        rimraf.sync(path.resolve(destPath, file));
+    }
 });
 
 describe('directories syncing', () => {
