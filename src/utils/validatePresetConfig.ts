@@ -1,7 +1,7 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import log from './log';
 
-import {Preset} from '../types';
+import type {Preset} from '../types';
 
 export const validatePresetConfig = (
     preset: Preset,

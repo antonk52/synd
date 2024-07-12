@@ -13,8 +13,8 @@ jest.mock('lodash.debounce', () => jest.fn());
 jest.mock('../getRsyncFunc', () => ({
     getRsyncFunc: jest.fn(),
 }));
-jest.mock('fs', () => ({watch: jest.fn()}));
-jest.mock('process', () => ({
+jest.mock('node:fs', () => ({watch: jest.fn()}));
+jest.mock('node:process', () => ({
     // eslint-disable-next-line
     exit: (code: number) => {
         throw new Error(code.toString());
@@ -26,7 +26,7 @@ beforeEach(() => {
 
     const {log} = require('../utils');
     log.mockRestore();
-    const fs = require('fs');
+    const fs = require('node:fs');
     fs.watch.mockRestore();
 });
 
@@ -49,7 +49,7 @@ describe('syndProcess', () => {
         expect(commandMock.mock.calls.length).toBe(1);
     });
     it('should start watching for changes when "watch" is set to true', () => {
-        const fs = require('fs');
+        const fs = require('node:fs');
         const {parseConfig: parseConfigMock} = require('../utils');
         parseConfigMock.mockImplementation(() => ({
             src: 'src/path',
@@ -94,7 +94,7 @@ describe('syndProcess', () => {
         ]);
     });
     it('should set up recursive file watcher, when watch is on', () => {
-        const fs = require('fs');
+        const fs = require('node:fs');
         const debounce = require('lodash.debounce');
         const {getRsyncFunc} = require('../getRsyncFunc');
         debounce.mockImplementationOnce((cb: AnyFunction) => cb);
@@ -120,7 +120,7 @@ describe('syndProcess', () => {
         expect(fs.watch.mock.calls[0][1]).toEqual({recursive: true});
         expect(fs.watch.mock.calls[0][2]).toBeInstanceOf(Function);
 
-        expect(() => cb && cb()).not.toThrow();
+        expect(() => cb?.()).not.toThrow();
         expect(execute.mock.calls).toHaveLength(1);
     });
 });

@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import rimraf from 'rimraf';
 import dirTree from 'directory-tree';
 
@@ -7,9 +7,9 @@ import {syndProcess} from '../src/syndProcess';
 
 /* eslint-disable */
 jest.mock('../src/utils/log', () => () => {});
-jest.mock(`../src/utils/getConfig`, () => ({
+jest.mock('../src/utils/getConfig', () => ({
     getConfig: (): any => {
-        const pathl = require('path');
+        const pathl = require('node:path');
         const src = `${pathl.resolve('./test/suits/gitignore/src')}/`;
         const dest = pathl.resolve('./test/suits/gitignore/dest');
 
@@ -33,8 +33,8 @@ function normalizePaths(
     const result = {
         ...tree,
         path: tree.path
-            .replace(`test/suits/gitignore/src`, '')
-            .replace(`test/suits/gitignore/dest`, ''),
+            .replace('test/suits/gitignore/src', '')
+            .replace('test/suits/gitignore/dest', ''),
     };
     if ('children' in tree && tree.children !== undefined)
         result.children = tree.children.map(x => normalizePaths(x, dirName));
@@ -45,8 +45,11 @@ function getAllPaths(tree: dirTree.DirectoryTree): string[] {
     const paths: string[] = [];
     function pushToTree(obj: dirTree.DirectoryTree): void {
         if (obj.type === 'file') paths.push(obj.path);
-        if ('children' in obj && obj.children !== undefined)
-            obj.children.forEach(o => pushToTree(o));
+        if ('children' in obj && obj.children !== undefined) {
+            for (const child of obj.children) {
+                pushToTree(child);
+            }
+        }
     }
     if (tree.children !== undefined) tree.children.forEach(pushToTree);
     return paths;
@@ -57,7 +60,9 @@ beforeEach(() => {
     if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
     const files = fs.readdirSync(destPath) || [];
 
-    files.forEach(x => rimraf.sync(path.resolve(destPath, x)));
+    for (const file of files) {
+        rimraf.sync(path.resolve(destPath, file));
+    }
 });
 
 // eslint-disable-next-line

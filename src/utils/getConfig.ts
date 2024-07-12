@@ -1,9 +1,9 @@
-import path from 'path';
-import fs from 'fs';
-import os from 'os';
+import path from 'node:path';
+import fs from 'node:fs';
+import os from 'node:os';
 
 import log from './log';
-import {SyndConfig} from '../types';
+import type {SyndConfig} from '../types';
 
 const CONFIG_NAME = 'synd.config.js';
 

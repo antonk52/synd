@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import process from 'process';
+import process from 'node:process';
 import kleur from 'kleur';
 
 const stamp = (): string => {

@@ -1,10 +1,10 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import RsyncPkg from 'rsync';
 
 import {onStdout} from './stdout';
 import {log} from '../utils';
 
-import {ValidatedPreset} from '../types';
+import type {ValidatedPreset} from '../types';
 
 function writeToStdout(b: Buffer): void {
     process.stdout.write(String(b));

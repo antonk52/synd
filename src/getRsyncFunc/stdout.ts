@@ -13,5 +13,7 @@ export function onStdout(buffer: Buffer): void {
     // eliminate upload info
     const files = output.filter(f => !(f === '' || f === './'));
 
-    files.forEach(name => log(`${kleur.yellow('uploading')}  ${name}`));
+    for (const name of files) {
+        log(`${kleur.yellow('uploading')}  ${name}`);
+    }
 }

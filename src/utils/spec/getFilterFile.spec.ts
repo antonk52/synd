@@ -1,21 +1,21 @@
 import {getFilterFile, getFilterDirPath} from '../getFilterFile';
-import fs from 'fs';
+import fs from 'node:fs';
 
-jest.mock('path', () => ({
+jest.mock('node:path', () => ({
     resolve: (a: string, b: string): string => [a, b].join('/'),
     join: (...strs: string[]): string => strs.join('/'),
 }));
 jest.mock('../getMd5Hash', () => ({getMd5Hash: (): string => 'HASH'}));
 jest.mock('../../../package.json', () => ({version: 'VERSION'}));
-jest.mock('os', () => ({homedir: (): string => 'HOMEDIR'}));
+jest.mock('node:os', () => ({homedir: (): string => 'HOMEDIR'}));
 // eslint-disable-next-line
 jest.mock('../log', () => (): void => {});
-jest.mock('fs', () => ({
+jest.mock('node:fs', () => ({
     existsSync: jest.fn(),
     mkdirSync: jest.fn(),
     writeFileSync: jest.fn(),
 }));
-jest.mock('process', () => ({env: {}}));
+jest.mock('node:process', () => ({env: {}}));
 
 describe('getFilterDirPath', () => {
     it('XDG PATH', () => {
@@ -52,7 +52,7 @@ describe('getFilterFile', () => {
     });
 
     it('should call fs.writeFileSync with given params', () => {
-        const fsMock = require('fs');
+        const fsMock = require('node:fs');
         const result = getFilterFile({
             include: ['a', 'b'],
             exclude: ['c', 'd'],
