@@ -1,6 +1,6 @@
 import {getParsedGitignores} from '../getParsedGitignores';
 
-jest.mock('fs', () => ({
+jest.mock('node:fs', () => ({
     existsSync: jest.fn(),
     readFileSync: jest.fn(),
 }));

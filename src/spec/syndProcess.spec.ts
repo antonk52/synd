@@ -13,8 +13,8 @@ jest.mock('lodash.debounce', () => jest.fn());
 jest.mock('../getRsyncFunc', () => ({
     getRsyncFunc: jest.fn(),
 }));
-jest.mock('fs', () => ({watch: jest.fn()}));
-jest.mock('process', () => ({
+jest.mock('node:fs', () => ({watch: jest.fn()}));
+jest.mock('node:process', () => ({
     // eslint-disable-next-line
     exit: (code: number) => {
         throw new Error(code.toString());
