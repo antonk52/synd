@@ -4,13 +4,13 @@ import dirTree from 'directory-tree';
 import {syndProcess} from '../src/syndProcess';
 
 /* eslint-disable */
-jest.mock('../src/utils/log', () =>
-    Object.assign((): void => {}, {
-        errorAndExit: (msg: string) => {
-            throw new Error(msg);
-        },
-    }),
-);
+// jest.mock('../src/utils/log', () =>
+//     Object.assign((): void => {}, {
+//         errorAndExit: (msg: string) => {
+//             throw new Error(msg);
+//         },
+//     }),
+// );
 /* eslint-enable */
 
 const syndConfig = {
