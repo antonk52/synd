@@ -14,7 +14,7 @@ jest.mock('../utils', () => ({
         },
     }),
 }));
-jest.mock('lodash.debounce', () => jest.fn());
+jest.mock('../debounce', () => ({debounce: jest.fn()}));
 jest.mock('../getRsyncFunc', () => ({
     getRsyncFunc: jest.fn(),
 }));
@@ -63,7 +63,7 @@ describe('syndProcess', () => {
         }));
         // eslint-disable-next-line
         const sudoOnFileChangeFunc = () => {};
-        const debounce = require('lodash.debounce');
+        const {debounce} = require('../debounce');
         debounce.mockImplementation(() => sudoOnFileChangeFunc);
         syndProcess({}, 'foobar');
 
@@ -74,7 +74,7 @@ describe('syndProcess', () => {
     });
     it('should set up recursive file watcher, when watch is on', () => {
         const fs = require('node:fs');
-        const debounce = require('lodash.debounce');
+        const {debounce} = require('../debounce');
         const {getRsyncFunc} = require('../getRsyncFunc');
         debounce.mockImplementationOnce((cb: AnyFunction) => cb);
         const execute = jest.fn();

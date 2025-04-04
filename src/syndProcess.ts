@@ -1,9 +1,9 @@
 import fs, {type WatchEventType} from 'node:fs';
-import debounce from 'lodash.debounce';
 import {getRsyncFunc} from './getRsyncFunc';
 import {getFilterFile, getPaths, parseConfig, log} from './utils';
 import {styleText} from 'node:util';
 import type {SyndConfig} from './types';
+import {debounce} from './debounce';
 
 export const syndProcess = (syndConfig: SyndConfig, name: string): void => {
     /** validated preset with defaults */
