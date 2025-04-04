@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import dirTree from 'directory-tree';
+import {syndProcess} from '../src/syndProcess';
 
 /* eslint-disable */
 jest.mock('../src/utils/log', () =>
@@ -10,23 +11,16 @@ jest.mock('../src/utils/log', () =>
         },
     }),
 );
-jest.mock('../src/utils/getConfig', () => ({
-    getConfig: () => {
-        const pathL = require('node:path');
-        const src = `${pathL.resolve('./test/suits/basic/src')}/`;
-        const dest = pathL.resolve('./test/suits/basic/dest');
-
-        return {
-            basic: {
-                src,
-                dest,
-                initSync: true,
-                watch: false,
-            },
-        };
-    },
-}));
 /* eslint-enable */
+
+const syndConfig = {
+    basic: {
+        src: `${path.resolve('./test/suits/basic/src')}/`,
+        dest: path.resolve('./test/suits/basic/dest'),
+        initSync: true,
+        watch: false,
+    },
+};
 function normalizePaths(
     tree: dirTree.DirectoryTree,
     dirName: string,
@@ -53,7 +47,6 @@ beforeEach(() => {
 });
 
 describe('directories syncing', () => {
-    const {syndProcess} = require('../src/syndProcess');
     const execSynd = async ({
         preset,
         timeout = 1000,
@@ -61,7 +54,7 @@ describe('directories syncing', () => {
         preset: string;
         timeout?: number;
     }): Promise<void> => {
-        syndProcess(preset, {});
+        syndProcess(syndConfig, preset);
 
         return new Promise(resolve => {
             setTimeout(() => {

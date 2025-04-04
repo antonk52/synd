@@ -1,4 +1,5 @@
 import {syndProcess} from './syndProcess';
+import {getConfig, log} from './utils';
 import {parseArgs} from 'node:util';
 
 const help = `Usage: synd [options] [preset]
@@ -28,9 +29,29 @@ function synd() {
         return console.log(`Version: ${require('../package.json')?.version}`);
     }
 
-    return syndProcess(args.positionals[0], {
-        list: args.values.list,
-    });
+    const syndConfig = getConfig();
+
+    if (args.values.list) {
+        log.plain('Your presets:');
+        log.plain(
+            Object.keys(syndConfig)
+                .map(k => `- ${k}`)
+                .join('\n'),
+        );
+
+        return;
+    }
+
+    const presetName = args.positionals[0];
+    if (!presetName) {
+        log(
+            `Preset name is missing, exiting. Run "synd <preset-name>". Exiting`,
+        );
+        return;
+    }
+    log(`Attepting "${presetName}" preset`);
+
+    return syndProcess(syndConfig, presetName);
 }
 
 synd();

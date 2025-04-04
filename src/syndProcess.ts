@@ -1,37 +1,11 @@
 import fs, {type WatchEventType} from 'node:fs';
-import process from 'node:process';
 import debounce from 'lodash.debounce';
 import {getRsyncFunc} from './getRsyncFunc';
-import {getConfig, getFilterFile, getPaths, parseConfig, log} from './utils';
+import {getFilterFile, getPaths, parseConfig, log} from './utils';
 import {styleText} from 'node:util';
+import type {SyndConfig} from './types';
 
-type Options = {
-    list?: boolean;
-};
-
-export const syndProcess = (name: string | void, cmd: Options): void => {
-    const syndConfig = getConfig();
-
-    if (cmd.list === true) {
-        log.plain('Your presets:');
-        log.plain(
-            Object.keys(syndConfig)
-                .map(k => `- ${k}`)
-                .join('\n'),
-        );
-
-        process.exit(0);
-    }
-
-    if (name === undefined) {
-        log(
-            `Preset name is missing, exiting. Run "synd <preset-name>". Exiting`,
-        );
-        process.exit(0);
-    }
-
-    log(`Going to try to do the "${name}" preset`);
-
+export const syndProcess = (syndConfig: SyndConfig, name: string): void => {
     /**
      * validated preset with defaults
      */
