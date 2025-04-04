@@ -120,7 +120,7 @@ describe('syndProcess', () => {
         expect(fs.watch.mock.calls[0][1]).toEqual({recursive: true});
         expect(fs.watch.mock.calls[0][2]).toBeInstanceOf(Function);
 
-        expect(() => cb?.()).not.toThrow();
+        expect(() => cb?.('change', 'foo/bar/baz')).not.toThrow();
         expect(execute.mock.calls).toHaveLength(1);
     });
 });

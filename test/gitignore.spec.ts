@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import rimraf from 'rimraf';
 import dirTree from 'directory-tree';
 
 import {syndProcess} from '../src/syndProcess';
@@ -61,7 +60,7 @@ beforeEach(() => {
     const files = fs.readdirSync(destPath) || [];
 
     for (const file of files) {
-        rimraf.sync(path.resolve(destPath, file));
+        fs.rmSync(path.resolve(destPath, file), {recursive: true, force: true});
     }
 });
 
