@@ -1,6 +1,6 @@
 {
   "name": "synd",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "yet another rsync wrapper",
   "main": "dist/index.js",
   "scripts": {
