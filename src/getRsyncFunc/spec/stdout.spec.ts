@@ -1,8 +1,8 @@
 import {onStdout} from '../stdout';
 
 jest.mock('../../utils', () => ({log: jest.fn()}));
-jest.mock('kleur', () => ({
-    yellow(x: string): string {
+jest.mock('node:util', () => ({
+    styleText(_: any, x: string): string {
         return x;
     },
 }));

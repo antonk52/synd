@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 import process from 'node:process';
-import kleur from 'kleur';
+import {styleText} from 'node:util';
 
 const stamp = (): string => {
     const d = new Date();
@@ -12,7 +12,7 @@ const stamp = (): string => {
 };
 
 const log = (text: string): void => {
-    process.stdout.write(`${kleur.gray(stamp())} ${text}\n`);
+    process.stdout.write(`${styleText('gray', stamp())} ${text}\n`);
 };
 
 const plain = (text: string): void => {
@@ -21,12 +21,10 @@ const plain = (text: string): void => {
 
 const errorAndExit = (reason: string): never => {
     const output = [
+        styleText(['bgRed', 'black'], ' Exiting now '),
         '\n\n',
-        kleur.bgRed().black(' Exiting now '),
-        '\n\n',
-        'reason: ',
-        kleur.dim().yellow(reason),
-        '\n\n',
+        'Reason: ',
+        styleText(['dim', 'yellow'], reason),
     ].join('');
     process.stdout.write(output);
     process.exit(1);

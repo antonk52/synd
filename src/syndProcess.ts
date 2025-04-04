@@ -1,9 +1,9 @@
-import fs from 'node:fs';
-import kleur from 'kleur';
+import fs, {type WatchEventType} from 'node:fs';
 import process from 'node:process';
 import debounce from 'lodash.debounce';
 import {getRsyncFunc} from './getRsyncFunc';
 import {getConfig, getFilterFile, getPaths, parseConfig, log} from './utils';
+import {styleText} from 'node:util';
 
 type Options = {
     list?: boolean;
@@ -57,13 +57,13 @@ export const syndProcess = (name: string | void, cmd: Options): void => {
     }
 
     const logDoneUploading = (): void => {
-        log(`${kleur.green('done')}`);
+        log(styleText('green', 'done'));
     };
     const syncUp = debounce(() => syncCommand.execute(logDoneUploading), 100);
 
     if (userConfig.watch) {
-        function onFileChange(eventType: string, filename: string): void {
-            log(`${kleur.yellow(eventType)} ${filename}`);
+        function onFileChange<T>(eventType: WatchEventType, filename: T): void {
+            log(`${styleText('yellow', eventType)} ${filename}`);
             syncUp();
         }
         fs.watch(userConfig.src, {recursive: true}, onFileChange);

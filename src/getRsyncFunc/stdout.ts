@@ -1,5 +1,4 @@
-import kleur from 'kleur';
-
+import {styleText} from 'node:util';
 import {log} from '../utils';
 
 export function onStdout(buffer: Buffer): void {
@@ -14,6 +13,6 @@ export function onStdout(buffer: Buffer): void {
     const files = output.filter(f => !(f === '' || f === './'));
 
     for (const name of files) {
-        log(`${kleur.yellow('uploading')}  ${name}`);
+        log(`${styleText('yellow', 'uploading')}  ${name}`);
     }
 }

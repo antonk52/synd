@@ -1,14 +1,36 @@
-import {Command} from 'commander';
 import {syndProcess} from './syndProcess';
+import {parseArgs} from 'node:util';
 
-const {version} = require('../package.json');
+const help = `Usage: synd [options] [preset]
 
-const program = new Command();
+Options:
+  -l, --list     list all presets
+  -v, --version  output the version number
+  -h, --help     display help for command`;
 
-program
-    .option('--list', 'list all presets')
-    .version(version, '-v, --version')
-    .arguments('[preset]')
-    .action(syndProcess);
+function synd() {
+    const args = parseArgs({
+        options: {
+            list: {type: 'boolean', short: 'l'},
+            help: {type: 'boolean', short: 'h'},
+            version: {type: 'boolean', short: 'v'},
+        },
+        allowPositionalOptions: true,
+        allowPositionals: true,
+        strict: true,
+    });
 
-program.parse(process.argv);
+    if (args.values.help) {
+        return console.log(help);
+    }
+
+    if (args.values.version) {
+        return console.log(`Version: ${require('../package.json')?.version}`);
+    }
+
+    return syndProcess(args.positionals[0], {
+        list: args.values.list,
+    });
+}
+
+synd();
