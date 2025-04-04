@@ -6,9 +6,7 @@ import {styleText} from 'node:util';
 import type {SyndConfig} from './types';
 
 export const syndProcess = (syndConfig: SyndConfig, name: string): void => {
-    /**
-     * validated preset with defaults
-     */
+    /** validated preset with defaults */
     const userConfig = parseConfig(syndConfig, name);
     const {include, exclude} = getPaths(userConfig);
     const filterFilePath = getFilterFile({
@@ -30,8 +28,12 @@ export const syndProcess = (syndConfig: SyndConfig, name: string): void => {
         log(`rsync command\n\n${syncCommand.command()}`);
     }
 
-    const logDoneUploading = (): void => {
-        log(styleText('green', 'done'));
+    const logDoneUploading = (msg: string | null): void => {
+        if (msg) {
+            log(styleText('red', msg));
+        } else {
+            log(styleText('green', 'done'));
+        }
     };
     const syncUp = debounce(() => syncCommand.execute(logDoneUploading), 100);
 
