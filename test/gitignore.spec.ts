@@ -6,24 +6,17 @@ import {syndProcess} from '../src/syndProcess';
 
 /* eslint-disable */
 jest.mock('../src/utils/log', () => () => {});
-jest.mock('../src/utils/getConfig', () => ({
-    getConfig: (): any => {
-        const pathl = require('node:path');
-        const src = `${pathl.resolve('./test/suits/gitignore/src')}/`;
-        const dest = pathl.resolve('./test/suits/gitignore/dest');
-
-        return {
-            gitignore: {
-                src,
-                dest,
-                localGitignore: true,
-                initSync: true,
-                watch: false,
-            },
-        };
-    },
-}));
 /* eslint-enable */
+
+const syndConfig = {
+    gitignore: {
+        src: `${path.resolve('./test/suits/gitignore/src')}/`,
+        dest: path.resolve('./test/suits/gitignore/dest'),
+        localGitignore: true,
+        initSync: true,
+        watch: false,
+    },
+};
 
 function normalizePaths(
     tree: dirTree.DirectoryTree,
@@ -66,7 +59,7 @@ beforeEach(() => {
 
 // eslint-disable-next-line
 const execSynd = async (timeout = 1000) => {
-    syndProcess('gitignore', {});
+    syndProcess(syndConfig, 'gitignore');
 
     return new Promise(resolve => {
         setTimeout(() => {
